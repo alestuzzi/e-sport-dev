@@ -5,9 +5,20 @@ const userSchema = new Schema({
   firstName: String,
   lastName: String,
   pseudo: String,
-  birthDate: Date,
+  birthDate: {
+    type: Date
+  },
   picture: String, 
-  team: String
+  team: String,
+  gender: {
+    type: String,
+    required: true,
+    enum: ['male', 'female']
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 // Create the model from the schema and export it
 module.exports = mongoose.model('User', userSchema);

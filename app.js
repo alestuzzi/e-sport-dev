@@ -14,6 +14,11 @@ var tournamentRouter = require('./routes/books');
 
 var app = express();
 
+app.use(function myMiddleware(req, res, next) {
+  console.log('Hello World!');
+  next();
+});
+
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 mongoose.connect('mongodb://localhost/esport');

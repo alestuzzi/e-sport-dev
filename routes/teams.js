@@ -1,24 +1,33 @@
-router.get('/', function (req, res, next) {
+var express = require('express');
+
+const teamRouter = express.Router();
+
+
+
+teamRouter.get('/', function (req, res, next) {
 
   
 });
 
-router.post('/', function (req, res, next) {
+teamRouter.post('/', function (req, res, next) {
 
   
 });
 
-router.get('/:id', function (req, res, next) {
+teamRouter.get('/:id', function (req, res, next) {
 
   
 });
 
-router.patch('/:id', function (req, res, next) {
+teamRouter.patch('/:id', function (req, res, next) {
 
   
 });
 
-router.delete('/:id', function (req, res, next) {
+teamRouter.delete('/:id', function (req, res, next) {
 
   
 });
+
+
+module.exports = teamRouter;

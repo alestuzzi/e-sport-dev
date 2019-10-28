@@ -7,6 +7,11 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+
+var playerRouter = require('./routes/books');
+var teamRouter = require('./routes/books');
+var tournamentRouter = require('./routes/books');
+
 var app = express();
 
 const mongoose = require('mongoose');

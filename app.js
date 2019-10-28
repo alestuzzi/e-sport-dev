@@ -8,9 +8,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 
-var playerRouter = require('./routes/books');
-var teamRouter = require('./routes/books');
-var tournamentRouter = require('./routes/books');
+var playerRouter = require('./routes/players');
+var teamRouter = require('./routes/teams');
+var tournamentRouter = require('./routes/tournaments');
 
 var app = express();
 

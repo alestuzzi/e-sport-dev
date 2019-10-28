@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+var ObjectId = mongoose.Schema.Types.ObjectId;
 // Define the schema for users
 const userSchema = new Schema({
   firstName: {
@@ -21,11 +22,13 @@ const userSchema = new Schema({
     maxlength: 200,
     unique: true,
   },
+  password: {
+    type: String,
+  },
   birthDate: {
     type: Date
   },
   picture: String, 
-  team: String,
   gender: {
     type: String,
     required: true,

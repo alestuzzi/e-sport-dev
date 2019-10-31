@@ -3,12 +3,17 @@ var express = require('express');
 const playerRouter = express.Router();
 
 playerRouter.get('/', function (req, res, next) {
-
-  
+    // affichage de tous les joueurs
+    User.find().sort('pseudo').exec(function(err, users) {
+        if (err) {
+          return next(err);
+        }
+        res.send(users);
+      });
 });
 
 playerRouter.post('/', function (req, res, next) {
-
+// ajout d'un nouveau joueur
   
 });
 /**
@@ -22,17 +27,17 @@ playerRouter.post('/', function (req, res, next) {
  * @apiSuccess {String} lastName  Last name of the user
  */
 playerRouter.get('/:id', function (req, res, next) {
-
+// affichage d'un joueur spécifique
   
 });
 
 playerRouter.patch('/:id', function (req, res, next) {
-
+// modification partielle d'un joueur
   
 });
 
 playerRouter.delete('/:id', function (req, res, next) {
-
+// suppression complète d'un joueur
   
 });
 

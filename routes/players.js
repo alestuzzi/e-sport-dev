@@ -6,6 +6,7 @@ const playerRouter = express.Router();
 const Player = require('../models/user');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
+const debug = require('debug');
 
 /* GET users listing by lastname */
 playerRouter.get('/', function (req, res, next) {
@@ -38,14 +39,56 @@ playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, nex
 });
 
 
-playerRouter.patch('/:id', function (req, res, next) {
-// modification partielle d'un joueur
-  
+/* PATCH one player by id  */
+playerRouter.patch('/:id', loadPlayerFromParamsMiddleware, function (req, res, next) {
+
+
+  // Update only properties present in the request body
+  if (req.body.firstName !== undefined) {
+    req.player.firstName = req.body.firstName;
+  }
+
+  if (req.body.lastName !== undefined) {
+    req.player.lastName = req.body.lastName;
+  }
+
+  if (req.body.pseudo !== undefined) {
+    req.player.pseudo = req.body.pseudo;
+  }
+
+  if (req.body.birthDate !== undefined) {
+    req.player.birthDate = req.body.birthDate;
+  }
+
+  if (req.body.picture !== undefined) {
+    req.player.picture = req.body.picture;
+  }
+
+  if (req.body.gender !== undefined) {
+    req.player.gender = req.body.gender;
+  }
+
+  req.player.save(function (err, savedPlayer) {
+    if (err) {
+      return next(err);
+    }
+
+    debug(`Updated Player "${savedPlayer.pseudo}"`);
+    res.send(savedPlayer);
+  });
 });
 
-playerRouter.delete('/:id', function (req, res, next) {
-// suppression complète d'un joueur
-  
+/* DELETE one player by id  */ 
+playerRouter.delete('/:id', loadPlayerFromParamsMiddleware, function (req, res, next) {
+
+  req.player.remove(function (err) {
+    if (err) {
+      return next(err);
+    }
+
+    debug(`Deleted Player "${req.player.pseudo}"`);
+    res.sendStatus(204);
+  });
 });
 
 

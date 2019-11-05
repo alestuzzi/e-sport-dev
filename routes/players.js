@@ -7,6 +7,7 @@ const Player = require('../models/user');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const debug = require('debug');
+const bcrypt = require('bcrypt');
 
 /* GET users listing by lastname */
 playerRouter.get('/', function (req, res, next) {
@@ -22,12 +23,24 @@ playerRouter.get('/', function (req, res, next) {
 /* POST one player */
 playerRouter.post('/', function (req, res, next) {
 
-  new Player(req.body).save(function (err, savedPlayer) {
+  const plainPassword = req.body.password;
+  const saltRounds = 10;
+
+    bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
     if (err) {
       return next(err);
     }
 
-    res.send(savedPlayer);
+      const newPlayer = new Player(req.body);
+      newPlayer.password = hashedPassword;
+
+      newPlayer.save(function (err, savedPlayer) {
+        if (err) {
+          return next(err);
+        }
+
+        res.send(savedPlayer);
+      });
   });
 });
 
@@ -89,6 +102,29 @@ playerRouter.delete('/:id', loadPlayerFromParamsMiddleware, function (req, res, 
     debug(`Deleted Player "${req.player.pseudo}"`);
     res.sendStatus(204);
   });
+});
+
+
+
+/* LOGIN (A METTRE ET ICI ?) */ 
+// TO DO CHECK CA AVEC SIMON
+playerRouter.post('/login', function(req, res, next) {
+  Player.findOne({ pseudo: req.body.pseudo }).exec(function(err, player) {
+    if (err) {
+      return next(err);
+    } else if (!player) {
+      return res.sendStatus(401);
+    }
+    bcrypt.compare(req.body.password, player.password, function(err, valid) {
+      if (err) {
+        return next(err);
+      } else if (!valid) {
+        return res.sendStatus(401);
+      }
+      // Login is valid...
+      res.send(`Welcome ${player.pseudo}!`);
+    });
+  })
 });
 
 

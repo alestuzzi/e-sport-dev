@@ -24,6 +24,7 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
+    required: true,
   },
   birthDate: {
     type: Date
@@ -39,5 +40,16 @@ const userSchema = new Schema({
     default: Date.now
   }
 });
+
+userSchema.set('toJSON', {
+   transform: transformJsonUser
+});
+
+function transformJsonUser(doc, json, options) {
+  // Remove the hashed password from the generated JSON.
+  delete json.password;
+  return json;
+}
+
 // Create the model from the schema and export it
 module.exports = mongoose.model('User', userSchema);

@@ -1,6 +1,7 @@
 var express = require('express');
 
 
+
 const playerRouter = express.Router();
 const Player = require('../models/user');
 const mongoose = require('mongoose');
@@ -28,6 +29,7 @@ playerRouter.post('/', function (req, res, next) {
     res.send(savedPlayer);
   });
 });
+
   
 /* GET one player by id */
 playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, next) {
@@ -37,12 +39,12 @@ playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, nex
 
 
 playerRouter.patch('/:id', function (req, res, next) {
-
+// modification partielle d'un joueur
   
 });
 
 playerRouter.delete('/:id', function (req, res, next) {
-
+// suppression complète d'un joueur
   
 });
 

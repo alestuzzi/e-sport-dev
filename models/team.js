@@ -24,7 +24,12 @@ const teamSchema = new Schema({
     logo: {
         type: String,
         required: true
-    }
+    },
+
+    createdAt: {
+    type: Date,
+    default: Date.now
+  }
 
 });
 
@@ -52,4 +57,6 @@ function validatePlayers(value) {
 
 }
 */
+
+// Create the model from the schema and export it
 module.exports = mongoose.model('Team', teamSchema);

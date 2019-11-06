@@ -25,7 +25,7 @@ playerRouter.post('/', function (req, res, next) {
 
   const plainPassword = req.body.password;
   const saltRounds = 10;
-
+    // hashing the password for security
     bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
     if (err) {
       return next(err);

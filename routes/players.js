@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const debug = require('debug');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.SECRET_KEY || 'changeme';
 
 /* GET users listing by lastname */
 playerRouter.get('/', function (req, res, next) {
@@ -106,26 +108,31 @@ playerRouter.delete('/:id', loadPlayerFromParamsMiddleware, function (req, res, 
 
 
 
-/* LOGIN (A METTRE ET ICI ?) */ 
-// TO DO CHECK CA AVEC SIMON
+/* LOGIN  */ 
+
 playerRouter.post('/login', function(req, res, next) {
+  // Find the user by pseudo.
   Player.findOne({ pseudo: req.body.pseudo }).exec(function(err, player) {
-    if (err) {
-      return next(err);
-    } else if (!player) {
-      return res.sendStatus(401);
-    }
+    if (err) { return next(err); }
+    else if (!player) { return res.sendStatus(401); }
+    // Validate the password.
     bcrypt.compare(req.body.password, player.password, function(err, valid) {
-      if (err) {
-        return next(err);
-      } else if (!valid) {
-        return res.sendStatus(401);
-      }
-      // Login is valid...
-      res.send(`Welcome ${player.pseudo}!`);
+      if (err) { return next(err); }
+      else if (!valid) { return res.sendStatus(401); }
+      // Generate a valid JWT which expires in 7 days.
+      const exp = (new Date().getTime() + 7 * 24 * 3600 * 1000) / 1000;
+      const claims = { sub: player._id.toString(), exp: exp };
+      jwt.sign(claims, secretKey, function(err, token) {
+        if (err) { return next(err); }
+        res.send({ token: token }); // Send the token to the client.
+      });
     });
   })
 });
+
+
+
+
 
 
 /* FUNCTIONS*/ 
@@ -158,5 +165,28 @@ function PlayerNotFound(res, playerId) {
   return res.status(404).type('text').send(`No player found with that ID ${playerId}`);
 }
 
+
+function authenticate(req, res, next) {
+  // Ensure the header is present.
+  const authorization = req.get('Authorization');
+  if (!authorization) {
+    return res.status(401).send('Authorization header is missing');
+  }
+  // Check that the header has the correct format.
+  const match = authorization.match(/^Bearer (.+)$/);
+  if (!match) {
+    return res.status(401).send('Authorization header is not a bearer token');
+  }
+  // Extract and verify the JWT.
+  const token = match[1];
+  jwt.verify(token, secretKey, function(err, payload) {
+    if (err) {
+      return res.status(401).send('Your token is invalid or has expired');
+    } else {
+      req.currentUserId = payload.sub;
+      next(); // Pass the ID of the authenticated user to the next middleware.
+    }
+  });
+}
 
 module.exports = playerRouter;

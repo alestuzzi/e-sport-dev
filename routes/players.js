@@ -17,6 +17,44 @@ playerRouter.get('/', function (req, res, next) {
     }
     res.send(users);
   });
+
+  Person.aggregate([
+    {
+      $lookup: {
+        from: 'movies',
+        localField: '_id',
+        foreignField: 'directorId',
+        as: 'directedMovies'
+      }
+    },
+    {
+      $unwind: '$directedMovies'
+    },
+    {
+      $group: {
+        _id: '$_id',
+        birthDate: { $first: '$birthDate' },
+        createdAt: { $first: '$createdAt' },
+        directedMovies: { $sum: 1 },
+        gender: { $first: '$gender' },
+        name: { $first: '$name' }
+      }
+    },
+    {
+      $sort: {
+        name: 1
+      }
+    },
+    {
+      $skip: (page - 1) * pageSize
+    },
+    {
+      $limit: pageSize
+    }
+  ], (err, people) => {
+    if (err) {
+      return next(err);
+    }
 });
 
 

@@ -3,6 +3,8 @@ var express = require('express');
 
 
 const playerRouter = express.Router();
+const config = require('../config');
+const formatLinkHeader = require('format-link-header');
 const Player = require('../models/user');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
@@ -15,12 +17,40 @@ const saltRounds = 10;
 
 /* GET users listing by lastname */
 playerRouter.get('/', function (req, res, next) {
-  Player.find().sort('lastName').exec(function(err, users) {
+
+  //Count total players matching the URL query parameters
+  const countQuery = queryPlayers(req);
+  countQuery.count(function (err, total){
+    if (err) {
+      return next(err);
+    }
+  // Prepare the initial database query from the URL query parameters
+  let query = queryPlayers(req);
+
+  // Parse pagination parameters from URL query parameters
+  const { page, pageSize } = getPaginationParameters(req)
+
+  // Apply the pagination to the database query
+  query = query.skip((page - 1) * pageSize).limit(pageSize);
+
+  // Add the Link header to the response
+  addLinkHeader('/api/player', page, pageSize, total, res);
+
+  //CHECKER AVEC SIMON
+  query.find().sort('pseudo').exec(function(err, users) {
     if (err) {
       return next(err);
     }
     res.send(users);
-  });
+    });
+  }); 
+
+/*   Player.find().sort('lastName').exec(function(err, users) {
+    if (err) {
+      return next(err);
+    }
+    res.send(users);
+  }); */
 });
 
 /* POST one player */
@@ -173,6 +203,12 @@ playerRouter.post('/login', function(req, res, next) {
 /* FUNCTIONS*/ 
 
 
+//Returns a Mongoose query that will retrieve players.
+function queryPlayers(req){
+  let query = Player.find();
+  return query;
+}
+
 /* catch the id and check it */
 function loadPlayerFromParamsMiddleware(req, res, next) {
 
@@ -222,6 +258,49 @@ function authenticate(req, res, next) {
       next(); // Pass the ID of the authenticated user to the next middleware.
     }
   });
+}
+
+ // Pagination function
+function getPaginationParameters (req) {
+
+  // Parse the "page" URL query parameter indicating the index of the first element that should be in the response
+  let page = parseInt(req.query.page, 10);
+  if (isNaN(page) || page < 1) {
+    page = 1;
+  }
+
+  // Parse the "pageSize" URL query parameter indicating how many elements should be in the response
+  let pageSize = parseInt(req.query.pageSize, 10);
+  if (isNaN(pageSize) || pageSize < 0 || pageSize > 100) {
+    pageSize = 100;
+  }
+
+  return { page, pageSize };
+}; 
+
+function addLinkHeader(resourceHref, page, pageSize, total, res) {
+
+  const links = {};
+  const url = config.baseUrl + resourceHref;
+  const maxPage = Math.ceil(total / pageSize);
+
+  // Add first & prev links if current page is not the first one
+  if (page > 1) {
+    links.first = { rel: 'first', url: `${url}?page=1&pageSize=${pageSize}` };
+    links.prev = { rel: 'prev', url: `${url}?page=${page - 1}&pageSize=${pageSize}` };
+  }
+
+  // Add next & last links if current page is not the last one
+  if (page < maxPage) {
+    links.next = { rel: 'next', url: `${url}?page=${page + 1}&pageSize=${pageSize}` };
+    links.last = { rel: 'last', url: `${url}?page=${maxPage}&pageSize=${pageSize}` };
+  }
+
+  // If there are any links (i.e. if there is more than one page),
+  // add the Link header to the response
+  if (Object.keys(links).length >= 1) {
+    res.set('Link', formatLinkHeader(links));
+  }
 }
 
 module.exports = playerRouter;

@@ -11,6 +11,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRET_KEY || 'changeme';
 
+const saltRounds = 10;
+
 /* GET users listing by lastname */
 playerRouter.get('/', function (req, res, next) {
   Player.find().sort('lastName').exec(function(err, users) {
@@ -25,7 +27,7 @@ playerRouter.get('/', function (req, res, next) {
 playerRouter.post('/', function (req, res, next) {
 
   const plainPassword = req.body.password;
-  const saltRounds = 10;
+
     // hashing the password for security
     bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
     if (err) {
@@ -54,56 +56,90 @@ playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, nex
 
 
 /* PATCH one player by id  */
-playerRouter.patch('/:id', loadPlayerFromParamsMiddleware, function (req, res, next) {
+playerRouter.patch('/:id', authenticate, loadPlayerFromParamsMiddleware, function (req, res, next) {
 
-
-  // Update only properties present in the request body
-  if (req.body.firstName !== undefined) {
-    req.player.firstName = req.body.firstName;
-  }
-
-  if (req.body.lastName !== undefined) {
-    req.player.lastName = req.body.lastName;
-  }
-
-  if (req.body.pseudo !== undefined) {
-    req.player.pseudo = req.body.pseudo;
-  }
-
-  if (req.body.birthDate !== undefined) {
-    req.player.birthDate = req.body.birthDate;
-  }
-
-  if (req.body.picture !== undefined) {
-    req.player.picture = req.body.picture;
-  }
-
-  if (req.body.gender !== undefined) {
-    req.player.gender = req.body.gender;
-  }
-
-  req.player.save(function (err, savedPlayer) {
+  Player.findById(req.params.id).exec(async function(err, player) {
+    
     if (err) {
       return next(err);
     }
+    // Check authorization
+    // Compare current id with id player 
+    if (req.currentUserId !== player.id.toString()) {
+      return res.status(403).send('Do not patch another player, not cool.')
+    }
 
-    debug(`Updated Player "${savedPlayer.pseudo}"`);
-    res.send(savedPlayer);
-  });
+    try {
+
+      // Update only properties present in the request body
+      if (req.body.firstName !== undefined) {
+        req.player.firstName = req.body.firstName;
+      }
+
+      if (req.body.lastName !== undefined) {
+        req.player.lastName = req.body.lastName;
+      }
+
+      if (req.body.pseudo !== undefined) {
+        req.player.pseudo = req.body.pseudo;
+      }
+      // promise to wait for the hash to be done 
+      if (req.body.password !== undefined) {
+        req.player.password = await bcrypt.hash(req.body.password, saltRounds);
+      }
+
+      if (req.body.birthDate !== undefined) {
+        req.player.birthDate = req.body.birthDate;
+      }
+
+      if (req.body.picture !== undefined) {
+        req.player.picture = req.body.picture;
+      }
+
+      if (req.body.gender !== undefined) {
+        req.player.gender = req.body.gender;
+      }
+
+      req.player.save(function (err, savedPlayer) {
+        if (err) {
+          return next(err);
+        }
+
+        debug(`Updated Player "${savedPlayer.pseudo}"`);
+        res.send(savedPlayer);
+      });
+
+    } catch (err) {
+      next(err);
+    }
+  });  
+
+
 });
 
 /* DELETE one player by id  */ 
-playerRouter.delete('/:id', loadPlayerFromParamsMiddleware, function (req, res, next) {
+playerRouter.delete('/:id', authenticate, loadPlayerFromParamsMiddleware, function (req, res, next) {
 
-  req.player.remove(function (err) {
+  
+  Player.findById(req.params.id).exec(function(err, player) {
+    
     if (err) {
       return next(err);
     }
+    // Check authorization
+    // Compare current id with id player 
+    if (req.currentUserId !== player.id.toString()) {
+      return res.status(403).send('Do not delete another player, not cool.')
+    }
 
-    debug(`Deleted Player "${req.player.pseudo}"`);
-    res.sendStatus(204);
+     debug(`Deleted Player "${req.player.pseudo}"`);
+     res.sendStatus(204);
   });
+
+
+
 });
+
 
 
 
@@ -142,7 +178,7 @@ function loadPlayerFromParamsMiddleware(req, res, next) {
 
   const playerId = req.params.id;
   if (!ObjectId.isValid(playerId)) {
-    return playerNotFound(res, playerId);
+    return PlayerNotFound(res, playerId);
   }
 
   let query = Player.findById(playerId)

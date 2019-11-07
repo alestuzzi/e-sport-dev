@@ -21,7 +21,6 @@ playerRouter.get('/', function (req, res, next) {
   });
 });
 
-
 /* POST one player */
 playerRouter.post('/', function (req, res, next) {
 

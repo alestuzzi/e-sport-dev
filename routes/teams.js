@@ -4,6 +4,7 @@ var express = require('express');
 
 const teamRouter = express.Router();
 const Team = require('../models/team');
+const Player = require('../models/user');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const debug = require('debug');
@@ -18,6 +19,37 @@ teamRouter.get('/', function (req, res, next) {
     }
     res.send(team);
   });
+
+  /* aggregation of the teams with the players */
+  Player.aggregate([
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'team.players',
+        foreignField: 'pseudo',
+        as: 'players'
+      }
+    },
+    {
+      $unwind: '$players'
+    },
+    {
+      $group: {
+        _id: '$_id',
+        birthDate: { $sum: '$birthDate' },
+      }
+    },
+    {
+      $sort: {
+        name: 1
+      }
+    },
+  ], (err, people) => {
+    if (err) {
+      return next(err);
+    }
+});
+
 });
 
 

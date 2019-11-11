@@ -17,6 +17,7 @@ const saltRounds = 10;
 
 
 
+
 /**
  * @api {get} /api/player List Players
  * @apiName RetrievePlayers
@@ -61,17 +62,40 @@ const saltRounds = 10;
  *  ]
  */
 
+//FUNCTIONS
+
+
+//Finds all the women in the Mongoose database
+function getAllWomen(){
+  
+  let query = Player.find();
+  query = query.where('gender').equals('female');
+
+  return query.exec();
+}
+//Finds all the men in the Mongoose database
+function getAllMen(){
+  
+  let query = Player.find();
+  query = query.where('gender').equals('male');
+
+  return query.exec();
+}
+
+
+
+
 /* GET users listing by lastname */
 playerRouter.get('/', function (req, res, next) {
 
   //Count total players matching the URL query parameters
-  const countQuery = queryPlayers(req);
+  const countQuery = Player.find();
   countQuery.count(function (err, total){
     if (err) {
       return next(err);
     }
   // Prepare the initial database query from the URL query parameters
-  let query = queryPlayers(req);
+  let query = Player.find();
 
   // Parse pagination parameters from URL query parameters
   const { page, pageSize } = getPaginationParameters(req)
@@ -81,8 +105,6 @@ playerRouter.get('/', function (req, res, next) {
 
   // Add the Link header to the response
   addLinkHeader('/api/player', page, pageSize, total, res);
-
-  //CHECKER AVEC SIMON
   query.find().sort('pseudo').exec(function(err, users) {
     if (err) {
       return next(err);
@@ -173,6 +195,7 @@ playerRouter.post('/', function (req, res, next) {
 
 
 
+
 /**
  * @api {get} /api/player/:id Retrieve a player
  * @apiName RetrievePlayer
@@ -203,6 +226,25 @@ playerRouter.post('/', function (req, res, next) {
  *       "__v": 0
  *     }
  */
+
+playerRouter.get('/filter', function (req, res, next) {
+  
+  // Filter users by gender
+  if (req.query.gender) {
+    switch (req.query.gender) {
+      case 'female':
+        getAllWomen().then(players=>{
+          res.send(players)
+        }).catch(err => console.log(err));
+      case 'male':
+        getAllMen().then(players => {
+          res.send(players)
+        }).catch(err => console.log(err));
+      break;
+    }
+  }
+});
+
   
 /* GET one player by id */
 playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, next) {
@@ -382,14 +424,8 @@ playerRouter.post('/login', function(req, res, next) {
 
 
 
-/* FUNCTIONS*/ 
 
 
-//Returns a Mongoose query that will retrieve players.
-function queryPlayers(req){
-  let query = Player.find();
-  return query;
-}
 
 /* catch the id and check it */
 function loadPlayerFromParamsMiddleware(req, res, next) {

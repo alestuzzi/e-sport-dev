@@ -1,9 +1,4 @@
-/**
- * Parses the pagination parameters (i.e. page & page size) from the request.
- *
- * @param {ExpressRequest} req - The Express request object
- * @returns An object with "page" and "pageSize" properties
- */
+
 exports.getPaginationParameters = function(req) {
 
   // Parse the "page" URL query parameter indicating the index of the first element that should be in the response

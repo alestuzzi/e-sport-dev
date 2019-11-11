@@ -9,6 +9,23 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const debug = require('debug');
 
+/**
+ * Get the years from now
+ *
+ * @param date  The date to get the years from now
+ */
+function yearsFromNow( date ) {
+  return (new Date() - date) / 1000 / 60 / 60 / 24 / 365;
+}
+
+/**
+* Gets the age of a person
+*
+* @param birthDate  The date when the person was born
+*/
+function age( birthDate ) {
+  return Math.floor( yearsFromNow( birthDate ) );
+}
 
 
 /* GET team listing by name */
@@ -17,39 +34,61 @@ teamRouter.get('/', function (req, res, next) {
     if (err) {
       return next(err);
     }
-    res.send(team);
+
+  /* aggregation of the teams with the players average age */
+      Team.aggregate([
+        {
+          $unwind: 
+          {
+            path: '$players',
+            preserveNullAndEmptyArrays: true
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'players',
+            foreignField: '_id',
+            as: 'playersInTeam'
+          }
+        },
+        
+        {
+          $group: {
+            _id: '$_id',
+            name: { $first: '$name' },
+            players: { $first: '$playersInTeam' },
+            logo: { $first: '$logo' },
+            createdAt: { $first: '$createdAt' },
+            totalPlayers: { $sum: 1 },
+          }
+        },
+        {
+          $sort: {
+            name: 1
+          }
+        },
+      ], (err, teams) => {
+        if (err) {
+          return next(err);
+        }
+        res.send(team);
+        /*
+        res.send(teams.map(team => {
+
+          // Transform the aggregated object into a Mongoose model.
+          const serialized = new Team(team).toJSON();
+
+          // Add the aggregated property.
+          serialized.totalPlayers = team.totalPlayers;
+
+          return serialized;
+        }));*/
+        
+      });
+
+      
   });
-
-  /* aggregation of the teams with the players */
-  Player.aggregate([
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'team.players',
-        foreignField: 'pseudo',
-        as: 'players'
-      }
-    },
-    {
-      $unwind: '$players'
-    },
-    {
-      $group: {
-        _id: '$_id',
-        birthDate: { $sum: '$birthDate' },
-      }
-    },
-    {
-      $sort: {
-        name: 1
-      }
-    },
-  ], (err, people) => {
-    if (err) {
-      return next(err);
-    }
-});
-
 });
 
 

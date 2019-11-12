@@ -12,11 +12,11 @@ var teamRouter = require('./routes/teams');
 var tournamentRouter = require('./routes/tournaments');
 
 var app = express();
-
+/* test middleware
 app.use(function myMiddleware(req, res, next) {
   console.log('Hello World!');
   next();
-});
+});*/
 
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;

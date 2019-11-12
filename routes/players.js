@@ -62,26 +62,6 @@ const saltRounds = 10;
  *  ]
  */
 
-//FUNCTIONS
-
-
-//Finds all the women in the Mongoose database
-function getAllWomen(){
-  
-  let query = Player.find();
-  query = query.where('gender').equals('female');
-
-  return query.exec();
-}
-//Finds all the men in the Mongoose database
-function getAllMen(){
-  
-  let query = Player.find();
-  query = query.where('gender').equals('male');
-
-  return query.exec();
-}
-
 
 
 
@@ -100,12 +80,35 @@ playerRouter.get('/', function (req, res, next) {
   // Parse pagination parameters from URL query parameters
   const { page, pageSize } = getPaginationParameters(req)
 
+  if (req.query.gender) {
+    switch (req.query.gender){
+      case 'female':
+        console.log('female filter');
+        query = query.where('gender').equals('female');
+        break;
+      case 'male':
+        query = query.where('gender').equals('male'); 
+        break;
+    } 
+  }
+/* 
+  if (req.query.birthDate) {
+    query = query.where('birthDate').equals(age(birthDate))
+  }
+  
+
+  function yearsFromNow( date ) {
+  return (new Date() - date) / 1000 / 60 / 60 / 24 / 365;
+}
+function age( birthDate ) {
+  return Math.floor( yearsFromNow( birthDate ) );
+}   */
   // Apply the pagination to the database query
   query = query.skip((page - 1) * pageSize).limit(pageSize);
 
   // Add the Link header to the response
   addLinkHeader('/api/player', page, pageSize, total, res);
-  query.find().sort('pseudo').exec(function(err, users) {
+  query.sort('pseudo').exec(function(err, users) {
     if (err) {
       return next(err);
     }
@@ -196,6 +199,7 @@ playerRouter.post('/', function (req, res, next) {
 
 
 
+
 /**
  * @api {get} /api/player/:id Retrieve a player
  * @apiName RetrievePlayer
@@ -226,25 +230,6 @@ playerRouter.post('/', function (req, res, next) {
  *       "__v": 0
  *     }
  */
-
-playerRouter.get('/filter', function (req, res, next) {
-  
-  // Filter users by gender
-  if (req.query.gender) {
-    switch (req.query.gender) {
-      case 'female':
-        getAllWomen().then(players=>{
-          res.send(players)
-        }).catch(err => console.log(err));
-      case 'male':
-        getAllMen().then(players => {
-          res.send(players)
-        }).catch(err => console.log(err));
-      break;
-    }
-  }
-});
-
   
 /* GET one player by id */
 playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, next) {
@@ -418,14 +403,6 @@ playerRouter.post('/login', function(req, res, next) {
     });
   })
 });
-
-
-
-
-
-
-
-
 
 /* catch the id and check it */
 function loadPlayerFromParamsMiddleware(req, res, next) {

@@ -11,6 +11,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const debug = require('debug');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 const secretKey = process.env.SECRET_KEY || 'changeme';
 
 const saltRounds = 10;
@@ -81,6 +82,7 @@ playerRouter.get('/', function (req, res, next) {
   // Parse pagination parameters from URL query parameters
   const { page, pageSize } = getPaginationParameters(req)
 
+  // Filter players by gender
   if (req.query.gender) {
     switch (req.query.gender){
       case 'female':
@@ -92,18 +94,20 @@ playerRouter.get('/', function (req, res, next) {
         break;
     } 
   }
-/* 
-  if (req.query.birthDate) {
-    query = query.where('birthDate').equals(age(birthDate))
+
+  // Filter players by age 
+  if (req.query.age) {
+  
+    const age = parseInt(req.query.age, 10);
+
+    const upperBound = moment().subtract(age, 'years').toDate();
+    const lowerBound = moment(upperBound).subtract(1, 'year').toDate();
+    
+    query = query.where('birthDate').gte(lowerBound).lte(upperBound);
+
   }
   
 
-  function yearsFromNow( date ) {
-  return (new Date() - date) / 1000 / 60 / 60 / 24 / 365;
-}
-function age( birthDate ) {
-  return Math.floor( yearsFromNow( birthDate ) );
-}   */
   // Apply the pagination to the database query
   query = query.skip((page - 1) * pageSize).limit(pageSize);
 

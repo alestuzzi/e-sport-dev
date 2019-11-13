@@ -23,18 +23,19 @@ const saltRounds = 10;
  * @apiName RetrievePlayers
  * @apiGroup Player
  * @apiVersion 1.0.0
- * @apiDescription Retrieves a paginated list of players ordered by their pseudo (in alphabetical order).
+ * @apiDescription Retrieves a paginated list of players ordered by their pseudo (in alphabetical order) with optional filters.
  *
  * @apiUse PlayerInResponseBody
  *
  *
  * @apiExample Example
- *     GET /api/player HTTP/1.1
+ *     GET /api/player?gender=male&page=2&pageSize=30 HTTP/1.1
  *
  * @apiSuccessExample 200 OK
  *     HTTP/1.1 200 OK
  *     Content-Type: application/json
- *     Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel="first prev"
+ *    // TO DO
+ *     Link: &lt;https://nameless-mountain-35811.herokuapp.com/api/player?gender=male&page=2&pageSize=30;; rel="first prev"
  *
  *  [
  *    {
@@ -244,7 +245,6 @@ playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, nex
  * @apiGroup Player
  * @apiVersion 1.0.0
  * @apiDescription Partially updates a player's data
- *S
  * @apiUse PlayerInRequestBody
  * @apiUse PlayerInResponseBody
  * @apiUse PlayerNotFoundError

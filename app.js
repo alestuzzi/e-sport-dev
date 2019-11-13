@@ -21,6 +21,7 @@ app.use(function myMiddleware(req, res, next) {
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 mongoose.connect('mongodb://localhost/esport');
+//mongoose.set('debug', true);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -1,3 +1,4 @@
+
 define({
   "name": "e-sport-dev",
   "version": "1.0.0",
@@ -9,8 +10,10 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2019-11-13T14:48:49.233Z",
+    "time": "2019-11-12T20:39:15.857Z",
     "url": "http://apidocjs.com",
     "version": "0.17.7"
   }
 });
+
+

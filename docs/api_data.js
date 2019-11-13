@@ -1,3 +1,4 @@
+
 define({ "api": [
   {
     "type": "post",
@@ -217,7 +218,7 @@ define({ "api": [
     "name": "PartiallyUpdatePlayer",
     "group": "Player",
     "version": "1.0.0",
-    "description": "<p>Partially updates a player's data S</p>",
+    "description": "<p>Partially updates a player's data</p>",
     "examples": [
       {
         "title": "Example",
@@ -493,11 +494,11 @@ define({ "api": [
     "name": "RetrievePlayers",
     "group": "Player",
     "version": "1.0.0",
-    "description": "<p>Retrieves a paginated list of players ordered by their pseudo (in alphabetical order).</p>",
+    "description": "<p>Retrieves a paginated list of players ordered by their pseudo (in alphabetical order) with optional filters.</p>",
     "examples": [
       {
         "title": "Example",
-        "content": "GET /api/player HTTP/1.1",
+        "content": "GET /api/player?gender=male HTTP/1.1",
         "type": "json"
       }
     ],
@@ -932,7 +933,7 @@ define({ "api": [
       "examples": [
         {
           "title": "200 OK",
-          "content": "   HTTP/1.1 200 OK\n   Content-Type: application/json\n   Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel=\"first prev\"\n\n  {\n     \"players\": [\n         \"111154f23437342a74ffe121\",\n         \"333154f23437342a74ffe122\",\n         \"333454f23437342a74ffe123\",\n         \"333154f23437342a74ffe124\",\n         \"333154f23437342a74ffe125\",\n         \"333154f23437342a74ffe126\"\n     ],\n     \"_id\": \"5dc1767576846e18643fe750\",\n     \"name\": \"Orlando\",\n     \"logo\": \"http://blabla\",\n     \"__v\": 5,\n     \"createdAt\": \"2019-11-11T14:19:21.593Z\",\n     \"totaPlayers\": \"6\"\n}",
+          "content": "   HTTP/1.1 200 OK\n   Content-Type: application/json\n   Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel=\"first prev\"\n\n  {\n     \"players\": [\n         \"111154f23437342a74ffe121\",\n         \"333154f23437342a74ffe122\",\n         \"333454f23437342a74ffe123\",\n         \"333154f23437342a74ffe124\",\n         \"333154f23437342a74ffe125\",\n         \"333154f23437342a74ffe126\"\n     ],\n     \"_id\": \"5dc1767576846e18643fe750\",\n     \"name\": \"Orlando\",\n     \"logo\": \"http://blabla\",\n     \"__v\": 5,\n     \"createdAt\": \"2019-11-11T14:19:21.593Z\",\n     \"totalPlayers\" : \"6\"\n}",
           "type": "json"
         }
       ],

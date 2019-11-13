@@ -58,8 +58,7 @@ function age( birthDate ) {
  *       "name": "Orlando",
  *       "logo": "http://blabla",
  *       "__v": 5,
- *       "createdAt": "2019-11-11T14:19:21.593Z",
- *       "totalPlayers" : "6"
+ *       "createdAt": "2019-11-11T14:19:21.593Z"
  *  }
  */
 
@@ -71,7 +70,7 @@ teamRouter.get('/', function (req, res, next) {
       return next(err);
     }
 
-  /* aggregation of the teams with the total number of players in each team */
+  /* aggregation of the teams with the players average age */
       Team.aggregate([
         {
           $unwind: 

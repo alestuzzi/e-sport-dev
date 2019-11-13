@@ -932,7 +932,7 @@ define({ "api": [
       "examples": [
         {
           "title": "200 OK",
-          "content": "   HTTP/1.1 200 OK\n   Content-Type: application/json\n   Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel=\"first prev\"\n\n  {\n     \"players\": [\n         \"111154f23437342a74ffe121\",\n         \"333154f23437342a74ffe122\",\n         \"333454f23437342a74ffe123\",\n         \"333154f23437342a74ffe124\",\n         \"333154f23437342a74ffe125\",\n         \"333154f23437342a74ffe126\"\n     ],\n     \"_id\": \"5dc1767576846e18643fe750\",\n     \"name\": \"Orlando\",\n     \"logo\": \"http://blabla\",\n     \"__v\": 5,\n     \"createdAt\": \"2019-11-11T14:19:21.593Z\"\n}",
+          "content": "   HTTP/1.1 200 OK\n   Content-Type: application/json\n   Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel=\"first prev\"\n\n  {\n     \"players\": [\n         \"111154f23437342a74ffe121\",\n         \"333154f23437342a74ffe122\",\n         \"333454f23437342a74ffe123\",\n         \"333154f23437342a74ffe124\",\n         \"333154f23437342a74ffe125\",\n         \"333154f23437342a74ffe126\"\n     ],\n     \"_id\": \"5dc1767576846e18643fe750\",\n     \"name\": \"Orlando\",\n     \"logo\": \"http://blabla\",\n     \"__v\": 5,\n     \"createdAt\": \"2019-11-11T14:19:21.593Z\",\n     \"totaPlayers\": \"6\"\n}",
           "type": "json"
         }
       ],

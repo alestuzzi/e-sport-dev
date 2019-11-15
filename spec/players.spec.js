@@ -116,7 +116,7 @@ describe('PATCH /api/player/:id', function() {
   	const res = await supertest(app)
 
 	  .patch('/api/player/'+player._id)
-	  .set('Authorization', 'Bearer' + user_jwt)
+	  .set('Authorization', 'Bearer ' + user_jwt)
 	  .send({
 	    firstName: 'Bobby',
 	    lastName: 'Singer',
@@ -172,7 +172,7 @@ describe('DELETE /api/player/:id', function() {
 
   	const res = await supertest(app)
 	  .delete('/api/player/'+player._id)
-	  .set('Authorization', 'Bearer' + user_jwt)
+	  .set('Authorization', 'Bearer ' + user_jwt)
 	  .expect(204)
 
 

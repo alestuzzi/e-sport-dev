@@ -37,6 +37,9 @@ const teamSchema = new Schema({
 
 
 
+
+
+
 /* TO DO IMPLEMENTER LA VALIDATION ET SUR TEAM ET TOURNAMENT AUSSI
 function validatePlayers(value) {
   return new Promise((resolve, reject) => {

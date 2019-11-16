@@ -51,7 +51,7 @@ describe('GET /api/players', function() {
     // Create 2 palyers before retrieving the list.
 	    await Promise.all([
 	      Player.create({ firstName: 'John', lastName: 'Doe', pseudo: 'JDO', password: 'changeme', birthDate: '1997-03-28T00:00:00.000Z', picture: 'https://picture', gender: 'male'  }),
-	      Player.create({ firstName: 'Jane', lastName: 'Doe', pseudo: 'JDA', password: 'changeme', birthDate: '1997-03-28T00:00:00.000Z', picture: 'https://picture', gender: 'female'  }),
+	      Player.create({ firstName: 'Jane', lastName: 'Doe', pseudo: 'JDA', password: 'changeme', birthDate: '1997-03-28T00:00:00.000Z', picture: 'https://picture', gender: 'female'  })
 	    ]);
    	});
 

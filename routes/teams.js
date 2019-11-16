@@ -1,13 +1,14 @@
 var express = require('express');
 
-
-
 const teamRouter = express.Router();
 const Team = require('../models/team');
 const Player = require('../models/user');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const debug = require('debug');
+
+
+const { availableTeam } = require('../dispatcher')
 
 /**
  * @api {get} /api/team List Teams
@@ -161,6 +162,8 @@ teamRouter.post('/', function (req, res, next) {
       return next(err);
     }
 
+     availableTeam();
+
     res.send(savedTeam);
   });
 });
@@ -294,6 +297,8 @@ teamRouter.delete('/:id', loadTeamFromParamsMiddleware, function (req, res, next
     if (err) {
       return next(err);
     }
+
+    availableTeam();
 
     debug(`Deleted Team "${req.team.name}"`);
     res.sendStatus(204);

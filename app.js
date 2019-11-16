@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1/esport', {
 
   useCreateIndex: true
 });
-mongoose.set('debug', process.env.NODE_ENV !== 'test');
+mongoose.set('debug', process.env.NODE_ENV !== 'tedst');
 
 
 // view engine setup

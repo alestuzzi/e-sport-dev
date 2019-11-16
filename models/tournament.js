@@ -28,8 +28,10 @@ const tournamentSchema = new Schema({
         default: null,
         required:true,
            /* validate: {
+
           // Validate that the teamid are valid ObjectId and references existing teams
           validator: validateTeams,
+
           message: function(props) { return props.reason.message; }
             } */
     }],

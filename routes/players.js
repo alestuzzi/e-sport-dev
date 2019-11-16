@@ -16,9 +16,6 @@ const secretKey = process.env.SECRET_KEY || 'changeme';
 
 const saltRounds = 10;
 
-
-
-
 /**
  * @api {get} /api/player List Players
  * @apiName RetrievePlayers
@@ -565,5 +562,8 @@ function addLinkHeader(resourceHref, page, pageSize, total, res) {
  * @apiParam (URL query parameters) {Number{1..100}} [pageSize] The number of elements to retrieve in one page (defaults to 100)
  * @apiSuccess (Response headers) {String} Link Links to the first, previous, next and last pages of the collection (if applicable)
  */
+
+
+
 
 module.exports = playerRouter;

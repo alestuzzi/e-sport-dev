@@ -10,24 +10,6 @@ const ObjectId = mongoose.Types.ObjectId;
 const debug = require('debug');
 
 /**
- * Get the years from now
- *
- * @param date  The date to get the years from now
- */
-function yearsFromNow( date ) {
-  return (new Date() - date) / 1000 / 60 / 60 / 24 / 365;
-}
-
-/**
-* Gets the age of a person
-*
-* @param birthDate  The date when the person was born
-*/
-function age( birthDate ) {
-  return Math.floor( yearsFromNow( birthDate ) );
-}
-
-/**
  * @api {get} /api/team List Teams
  * @apiName RetrieveTeams
  * @apiGroup Team

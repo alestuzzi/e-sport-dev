@@ -22,7 +22,7 @@ const tournamentSchema = new Schema({
         default: null,
         required:true,
            /* validate: {
-          // Validate that the playersid are valid ObjectId and references existing persons
+          // Validate that the playersid are valid ObjectId and references existing paersons
           validator: validatePlayers,
           message: function(props) { return props.reason.message; }
             } */

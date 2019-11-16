@@ -1,4 +1,3 @@
-
 define({ "api": [
   {
     "type": "post",
@@ -65,7 +64,7 @@ define({ "api": [
       "examples": [
         {
           "title": "201 Created",
-          "content": " HTTP/1.1 201 Created\n Content-Type: application/json\n Location: https://evening-meadow-25867.herokuapp.com/api/movies/58b2926f5e1def0123e97281\n\n{\n    \"_id\": \"5dc2ea214d7a71492043832d\",\n    \"firstName\": \"Lucien\",\n    \"lastName\": \"Pochon\",\n    \"pseudo\": \"LP\",\n    \"birthDate\": \"1995-12-17T02:24:00.000Z\",\n    \"picture\": \"https://picture\",\n    \"gender\": \"male\",\n    \"createdAt\": \"2019-11-06T15:43:29.890Z\",\n    \"__v\": 0\n}",
+          "content": " HTTP/1.1 201 Created\n Content-Type: application/json\n Location: https://evening-meadow-25867.herokuapp.com/api/movies/58b2926f5e1def0123e97281\n\n{\n    \"_id\": \"5dc2ea214d7a71492043832d\",\n    \"firstName\": \"Lucien\",\n    \"lastName\": \"Pochon\",\n    \"pseudo\": \"LPO\",\n    \"birthDate\": \"1995-12-17T02:24:00.000Z\",\n    \"picture\": \"https://picture\",\n    \"gender\": \"male\",\n    \"createdAt\": \"2019-11-06T15:43:29.890Z\",\n    \"__v\": 0\n}",
           "type": "json"
         }
       ]
@@ -393,7 +392,7 @@ define({ "api": [
       "examples": [
         {
           "title": "200 OK",
-          "content": "  HTTP/1.1 200 OK\n  Content-Type: application/json\n\n{\n    \"_id\": \"5dc2ea214d7a71492043832d\",\n    \"firstName\": \"Lucien\",\n    \"lastName\": \"Pochon\",\n    \"pseudo\": \"LP\",\n    \"birthDate\": \"1995-12-17T02:24:00.000Z\",\n    \"picture\": \"https://blalba\",\n    \"gender\": \"male\",\n    \"createdAt\": \"2019-11-06T15:43:29.890Z\",\n    \"__v\": 0\n  }",
+          "content": "  HTTP/1.1 200 OK\n  Content-Type: application/json\n\n{\n    \"_id\": \"5dc2ea214d7a71492043832d\",\n    \"firstName\": \"Lucien\",\n    \"lastName\": \"Pochon\",\n    \"pseudo\": \"LPO\",\n    \"birthDate\": \"1995-12-17T02:24:00.000Z\",\n    \"picture\": \"https://blalba\",\n    \"gender\": \"male\",\n    \"createdAt\": \"2019-11-06T15:43:29.890Z\",\n    \"__v\": 0\n  }",
           "type": "json"
         }
       ],
@@ -498,7 +497,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Example",
-        "content": "GET /api/player?gender=male HTTP/1.1",
+        "content": "GET /api/player?gender=male&page=2&pageSize=30 HTTP/1.1",
         "type": "json"
       }
     ],
@@ -506,7 +505,7 @@ define({ "api": [
       "examples": [
         {
           "title": "200 OK",
-          "content": "   HTTP/1.1 200 OK\n   Content-Type: application/json\n   Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel=\"first prev\"\n\n[\n  {\n      \"_id\": \"5dc2ea214d7a71492043832d\",\n      \"firstName\": \"Lucien\",\n      \"lastName\": \"Pochon\",\n      \"pseudo\": \"LP\",\n      \"birthDate\": \"1995-12-17T02:24:00.000Z\",\n      \"picture\": \"https://picture\",\n      \"gender\": \"male\",\n      \"createdAt\": \"2019-11-06T15:43:29.890Z\",\n      \"__v\": 0\n  },\n  {\n      \"_id\": \"5dc19f3943779a32c4f0fbb4\",\n      \"firstName\": \"Elisa\",\n      \"lastName\": \"Biver\",\n      \"pseudo\": \"EB\",\n      \"birthDate\": \"1995-12-17T02:24:00.000Z\",\n      \"picture\": \"https://picture\",\n      \"gender\": \"female\",\n      \"createdAt\": \"2019-11-05T16:11:37.988Z\",\n      \"__v\": 0\n  }\n]",
+          "content": "   HTTP/1.1 200 OK\n   Content-Type: application/json\n  // TO DO\n   Link: &lt;https://nameless-mountain-35811.herokuapp.com/api/player?gender=male&page=2&pageSize=30;; rel=\"first prev\"\n\n[\n  {\n      \"_id\": \"5dc2ea214d7a71492043832d\",\n      \"firstName\": \"Lucien\",\n      \"lastName\": \"Pochon\",\n      \"pseudo\": \"LP\",\n      \"birthDate\": \"1995-12-17T02:24:00.000Z\",\n      \"picture\": \"https://picture\",\n      \"gender\": \"male\",\n      \"createdAt\": \"2019-11-06T15:43:29.890Z\",\n      \"__v\": 0\n  },\n  {\n      \"_id\": \"5dc19f3943779a32c4f0fbb4\",\n      \"firstName\": \"Elisa\",\n      \"lastName\": \"Biver\",\n      \"pseudo\": \"EB\",\n      \"birthDate\": \"1995-12-17T02:24:00.000Z\",\n      \"picture\": \"https://picture\",\n      \"gender\": \"female\",\n      \"createdAt\": \"2019-11-05T16:11:37.988Z\",\n      \"__v\": 0\n  }\n]",
           "type": "json"
         }
       ],
@@ -933,7 +932,7 @@ define({ "api": [
       "examples": [
         {
           "title": "200 OK",
-          "content": "   HTTP/1.1 200 OK\n   Content-Type: application/json\n   Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel=\"first prev\"\n\n  {\n     \"players\": [\n         \"111154f23437342a74ffe121\",\n         \"333154f23437342a74ffe122\",\n         \"333454f23437342a74ffe123\",\n         \"333154f23437342a74ffe124\",\n         \"333154f23437342a74ffe125\",\n         \"333154f23437342a74ffe126\"\n     ],\n     \"_id\": \"5dc1767576846e18643fe750\",\n     \"name\": \"Orlando\",\n     \"logo\": \"http://blabla\",\n     \"__v\": 5,\n     \"createdAt\": \"2019-11-11T14:19:21.593Z\",\n     \"totalPlayers\" : \"6\"\n}",
+          "content": "   HTTP/1.1 200 OK\n   Content-Type: application/json\n   Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel=\"first prev\"\n\n  {\n     \"players\": [\n         \"111154f23437342a74ffe121\",\n         \"333154f23437342a74ffe122\",\n         \"333454f23437342a74ffe123\",\n         \"333154f23437342a74ffe124\",\n         \"333154f23437342a74ffe125\",\n         \"333154f23437342a74ffe126\"\n     ],\n     \"_id\": \"5dc1767576846e18643fe750\",\n     \"name\": \"Orlando\",\n     \"logo\": \"http://blabla\",\n     \"__v\": 5,\n     \"createdAt\": \"2019-11-11T14:19:21.593Z\",\n     \"totaPlayers\": \"6\"\n}",
           "type": "json"
         }
       ],

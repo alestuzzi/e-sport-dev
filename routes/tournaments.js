@@ -7,6 +7,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const debug = require('debug');
 
 
+const { availableTournament } = require('../dispatcher');
 /**
  * @api {get} /api/tournament List Tournaments
  * @apiName RetrieveTournament
@@ -123,6 +124,8 @@ tournamentRouter.post('/', function (req, res, next) {
     if (err) {
       return next(err);
     }
+
+  availableTournament();
 
     res.send(savedTournament);
   });
@@ -281,6 +284,8 @@ tournamentRouter.delete('/:id', loadTournamentFromParamsMiddleware, function (re
     if (err) {
       return next(err);
     }
+
+    availableTournament();
 
     debug(`Deleted Tournament "${req.tournament.name}"`);
     res.sendStatus(204);

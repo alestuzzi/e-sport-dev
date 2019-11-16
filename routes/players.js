@@ -16,9 +16,6 @@ const secretKey = process.env.SECRET_KEY || 'changeme';
 
 const saltRounds = 10;
 
-
-
-
 /**
  * @api {get} /api/player List Players
  * @apiName RetrievePlayers
@@ -27,24 +24,26 @@ const saltRounds = 10;
  * @apiDescription Retrieves a paginated list of players ordered by their pseudo (in alphabetical order) with optional filters.
  *
  * @apiUse PlayerInResponseBody
+ * @apiUse Pagination
  *
- *
+ * @apiParam (URL query parameters) {String} [gender] Select only the players with the specified gender.
+ * @apiParam (URL query parameters) {String} [age] Select only the players with the specified age.
+ * 
  * @apiExample Example
- *     GET /api/player?gender=male&page=2&pageSize=30 HTTP/1.1
+ *     GET /api/player?gender=male&age=26&page=2&pageSize=30 HTTP/1.1
  *
  * @apiSuccessExample 200 OK
  *     HTTP/1.1 200 OK
  *     Content-Type: application/json
- *    // TO DO
- *     Link: &lt;https://nameless-mountain-35811.herokuapp.com/api/player?gender=male&page=2&pageSize=30;; rel="first prev"
+ *     Link: &lt;https://e-sport-dev.herokuapp.com/api/player?gender=male&age=26&page=2&pageSize=30; rel="first prev"
  *
  *  [
  *    {
  *        "_id": "5dc2ea214d7a71492043832d",
  *        "firstName": "Lucien",
  *        "lastName": "Pochon",
- *        "pseudo": "LP",
- *        "birthDate": "1995-12-17T02:24:00.000Z",
+ *        "pseudo": "LPN",
+ *        "birthDate": "1993-07-17T02:24:00.000Z",
  *        "picture": "https://picture",
  *        "gender": "male",
  *        "createdAt": "2019-11-06T15:43:29.890Z",
@@ -52,22 +51,17 @@ const saltRounds = 10;
  *    },
  *    {
  *        "_id": "5dc19f3943779a32c4f0fbb4",
- *        "firstName": "Elisa",
- *        "lastName": "Biver",
- *        "pseudo": "EB",
- *        "birthDate": "1995-12-17T02:24:00.000Z",
+ *        "firstName": "Adrien",
+ *        "lastName": "Lestuzzi",
+ *        "pseudo": "ADL",
+ *        "birthDate": "1993-04-17T02:24:00.000Z",
  *        "picture": "https://picture",
- *        "gender": "female",
+ *        "gender": "male",
  *        "createdAt": "2019-11-05T16:11:37.988Z",
  *        "__v": 0
  *    }
  *  ]
  */
-
-
-
-
-/* GET users listing by lastname */
 playerRouter.get('/', function (req, res, next) {
 
   //Count total players matching the URL query parameters
@@ -106,7 +100,6 @@ playerRouter.get('/', function (req, res, next) {
     query = query.where('birthDate').gte(lowerBound).lte(upperBound);
 
   }
-  
 
   // Apply the pagination to the database query
   query = query.skip((page - 1) * pageSize).limit(pageSize);
@@ -120,16 +113,7 @@ playerRouter.get('/', function (req, res, next) {
     res.send(users);
     });
   }); 
-
-/*   Player.find().sort('lastName').exec(function(err, users) {
-    if (err) {
-      return next(err);
-    }
-    res.send(users);
-  }); */
 });
-
-
 
 /**
  * @api {post} /api/player Create a player
@@ -150,9 +134,9 @@ playerRouter.get('/', function (req, res, next) {
  * {
  *       "firstName": "Lucien",
  *       "lastName": "Pochon",
- *       "pseudo": "Kinoa",
+ *       "pseudo": "LucienP",
  *       "password": "changeme"
- *       "birthDate": "1995-12-17T02:24:00.000Z",
+ *       "birthDate": "1993-07-17T02:24:00.000Z",
  *       "picture": "https://blalba",
  *       "gender": "male",
  *  }
@@ -161,35 +145,34 @@ playerRouter.get('/', function (req, res, next) {
  * @apiSuccessExample 201 Created
  *     HTTP/1.1 201 Created
  *     Content-Type: application/json
- *     Location: https://evening-meadow-25867.herokuapp.com/api/movies/58b2926f5e1def0123e97281
+ *     Location: https://e-sport-dev.herokuapp.com/api/player/5dc2ea214d7a71492043832d
  *
  *    {
  *        "_id": "5dc2ea214d7a71492043832d",
  *        "firstName": "Lucien",
  *        "lastName": "Pochon",
  *        "pseudo": "LPO",
- *        "birthDate": "1995-12-17T02:24:00.000Z",
+ *        "birthDate": "1993-07-17T02:24:00.000Z",
  *        "picture": "https://picture",
  *        "gender": "male",
  *        "createdAt": "2019-11-06T15:43:29.890Z",
  *        "__v": 0
  *    }
  */
-
-/* POST one player */
 playerRouter.post('/', function (req, res, next) {
 
   const plainPassword = req.body.password;
 
-    // hashing the password for security
+    // Hashing the password for security
     bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
     if (err) {
       return next(err);
     }
-
+      // Assign the hashed password to a player
       const newPlayer = new Player(req.body);
       newPlayer.password = hashedPassword;
 
+      // Save player
       newPlayer.save(function (err, savedPlayer) {
         if (err) {
           return next(err);
@@ -200,18 +183,13 @@ playerRouter.post('/', function (req, res, next) {
   });
 });
 
-
-
-
-
-
 /**
  * @api {get} /api/player/:id Retrieve a player
  * @apiName RetrievePlayer
  * @apiGroup Player
  * @apiVersion 1.0.0
  * @apiDescription Retrieves one player.
- *
+ * 
  * @apiUse PlayerIdInUrlPath
  * @apiUse PlayerInResponseBody
  * @apiUse PlayerNotFoundError
@@ -227,21 +205,18 @@ playerRouter.post('/', function (req, res, next) {
  *       "_id": "5dc2ea214d7a71492043832d",
  *       "firstName": "Lucien",
  *       "lastName": "Pochon",
- *       "pseudo": "LPO",
- *       "birthDate": "1995-12-17T02:24:00.000Z",
+ *       "pseudo": "LPN",
+ *       "birthDate": "1993-07-17T02:24:00.000Z",
  *       "picture": "https://blalba",
  *       "gender": "male",
  *       "createdAt": "2019-11-06T15:43:29.890Z",
  *       "__v": 0
  *     }
  */
-  
-/* GET one player by id */
 playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, next) {
 
   res.send(req.player);
 });
-
 
 /**
  * @api {patch} /api/player/:id Partially update a player
@@ -249,6 +224,9 @@ playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, nex
  * @apiGroup Player
  * @apiVersion 1.0.0
  * @apiDescription Partially updates a player's data
+ * All properties are optional.
+ * 
+ * @apiUse PlayerIdInUrlPath
  * @apiUse PlayerInRequestBody
  * @apiUse PlayerInResponseBody
  * @apiUse PlayerNotFoundError
@@ -259,7 +237,7 @@ playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, nex
  *     Content-Type: application/json
  *
  *     {
- *       "pseudo": Kohala
+ *       "pseudo": LucienP
  *     }
  *
  * @apiSuccessExample 200 OK
@@ -270,16 +248,14 @@ playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, nex
  *       "_id": "5dc2ea214d7a71492043832d",
  *       "firstName": "Lucien",
  *       "lastName": "Pochon",
- *       "pseudo": "Kohala",
- *       "birthDate": "1995-12-17T02:24:00.000Z",
+ *       "pseudo": "LucienP",
+ *       "birthDate": "1993-07-17T02:24:00.000Z",
  *       "picture": "https://blalba",
  *       "gender": "male",
  *       "createdAt": "2019-11-06T15:43:29.890Z",
  *       "__v": 0
  *     }
  */
-
-/* PATCH one player by id  */
 playerRouter.patch('/:id', authenticate, loadPlayerFromParamsMiddleware, function (req, res, next) {
 
   Player.findById(req.params.id).exec(async function(err, player) {
@@ -337,10 +313,7 @@ playerRouter.patch('/:id', authenticate, loadPlayerFromParamsMiddleware, functio
       next(err);
     }
   });  
-
-
 });
-
 
 /**
  * @api {delete} /api/player/:id Delete a player
@@ -358,12 +331,8 @@ playerRouter.patch('/:id', authenticate, loadPlayerFromParamsMiddleware, functio
  * @apiSuccessExample 204 No Content
  *     HTTP/1.1 204 No Content
  */
-
-
-/* DELETE one player by id  */ 
 playerRouter.delete('/:id', authenticate, loadPlayerFromParamsMiddleware, function (req, res, next) {
 
-  
   Player.findById(req.params.id).exec(function(err, player) {
     
     if (err) {
@@ -378,13 +347,7 @@ playerRouter.delete('/:id', authenticate, loadPlayerFromParamsMiddleware, functi
      debug(`Deleted Player "${req.player.pseudo}"`);
      res.sendStatus(204);
   });
-
-
-
 });
-
-
-
 
 /* LOGIN  */ 
 
@@ -408,7 +371,10 @@ playerRouter.post('/login', function(req, res, next) {
   })
 });
 
-/* catch the id and check it */
+/**
+ * Middleware that loads the player corresponding to the ID in the URL path.
+ * Responds with 404 Not Found if the ID is not valid or the movie doesn't exist.
+ */
 function loadPlayerFromParamsMiddleware(req, res, next) {
 
   const playerId = req.params.id;
@@ -430,7 +396,9 @@ function loadPlayerFromParamsMiddleware(req, res, next) {
   });
 }
 
-/* send an error message if the id is not found */
+/**
+ * Responds with 404 Not Found and a message indicating that the player with the specified ID was not found.
+ */
 function PlayerNotFound(res, playerId) {
   return res.status(404).type('text').send(`No player found with that ID ${playerId}`);
 }
@@ -459,7 +427,13 @@ function authenticate(req, res, next) {
   });
 }
 
- // Pagination function
+/**
+ * Parses the pagination parameters (i.e. page & page size) from the request.
+ *
+ * @param {ExpressRequest} req - The Express request object
+ * @returns An object with "page" and "pageSize" properties
+ */
+
 function getPaginationParameters (req) {
 
   // Parse the "page" URL query parameter indicating the index of the first element that should be in the response
@@ -476,6 +450,16 @@ function getPaginationParameters (req) {
 
   return { page, pageSize };
 }; 
+
+/**
+ * Adds a Link header to the response (if applicable).
+ *
+ * @param {String} resourceHref - The hyperlink reference of the collection (e.g. "/api/people")
+ * @param {Number} page - The page being listed
+ * @param {Number} pageSize - The page size
+ * @param {Number} total - The total number of elements
+ * @param {ExpressResponse} res - The Exprss response object
+ */
 
 function addLinkHeader(resourceHref, page, pageSize, total, res) {
 
@@ -502,7 +486,6 @@ function addLinkHeader(resourceHref, page, pageSize, total, res) {
   }
 }
 
-
 /**
  * @apiDefine PlayerIdInUrlPath
  * @apiParam (URL path parameters) {String} id The unique identifier of the player
@@ -514,9 +497,10 @@ function addLinkHeader(resourceHref, page, pageSize, total, res) {
  * @apiParam (Request body) {String{3..200}} lastName The last name of the player
  * @apiParam (Request body) {String{3..200}} pseudo The pseudo the player can choose (must be unique)
  * @apiParam (Request body) {String} password The password of the player
- * @apiParam (Request body) {String} [birthDate] birthDate The day the player was born
- * @apiParam (Request body) {string} picture Link to a picture who show who is the player
-*/
+ * @apiParam (Request body) {String} birthDate birthDate The day the player was born
+ * @apiParam (Request body) {String} picture Link to a picture who show who is the player
+ * @apiParam (Request body) {String} gender The gender of the player
+ */
 
 /**
  * @apiDefine PlayerInResponseBody
@@ -526,10 +510,8 @@ function addLinkHeader(resourceHref, page, pageSize, total, res) {
  * @apiSuccess (Response body) {String} pseudo The pseudo the player can choose (must be unique)
  * @apiSuccess (Response body) {Date} birthDate The day the player was born
  * @apiSuccess (Response body) {String} picture Link to a picture who show who is the player
- * @apiSuccess (Response body) {Date} createdAt The date at which the player was registered
+ * @apiSuccess (Response body) {Date} [createdAt] The date at which the player was registered
 */
-
-
 
 /**
  * @apiDefine PlayerNotFoundError
@@ -540,7 +522,7 @@ function addLinkHeader(resourceHref, page, pageSize, total, res) {
  *     HTTP/1.1 404 Not Found
  *     Content-Type: text/plain
  *
- *     No player found with ID 58b4326f5e1def0123e97281
+ *     No player found with ID 5dc2ea214d7a71492043832d 
  */
 
 /**
@@ -571,7 +553,17 @@ function addLinkHeader(resourceHref, page, pageSize, total, res) {
  *         }
  *       }
  *     }
+ * 
  */
+
+ /**
+ * @apiDefine Pagination
+ * @apiParam (URL query parameters) {Number{1..}} [page] The page to retrieve (defaults to 1)
+ * @apiParam (URL query parameters) {Number{1..100}} [pageSize] The number of elements to retrieve in one page (defaults to 100)
+ * @apiSuccess (Response headers) {String} Link Links to the first, previous, next and last pages of the collection (if applicable)
+ */
+
+
 
 
 module.exports = playerRouter;

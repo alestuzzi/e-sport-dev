@@ -65,11 +65,6 @@ const saltRounds = 10;
  *    }
  *  ]
  */
-
-
-
-
-/* GET users listing by lastname */
 playerRouter.get('/', function (req, res, next) {
 
   //Count total players matching the URL query parameters
@@ -108,7 +103,6 @@ playerRouter.get('/', function (req, res, next) {
     query = query.where('birthDate').gte(lowerBound).lte(upperBound);
 
   }
-  
 
   // Apply the pagination to the database query
   query = query.skip((page - 1) * pageSize).limit(pageSize);
@@ -123,8 +117,6 @@ playerRouter.get('/', function (req, res, next) {
     });
   }); 
 });
-
-
 
 /**
  * @api {post} /api/player Create a player
@@ -147,7 +139,7 @@ playerRouter.get('/', function (req, res, next) {
  *       "lastName": "Pochon",
  *       "pseudo": "LucienP",
  *       "password": "changeme"
- *       "birthDate": "1995-12-17T02:24:00.000Z",
+ *       "birthDate": "1993-07-17T02:24:00.000Z",
  *       "picture": "https://blalba",
  *       "gender": "male",
  *  }
@@ -163,28 +155,27 @@ playerRouter.get('/', function (req, res, next) {
  *        "firstName": "Lucien",
  *        "lastName": "Pochon",
  *        "pseudo": "LPO",
- *        "birthDate": "1995-12-17T02:24:00.000Z",
+ *        "birthDate": "1993-07-17T02:24:00.000Z",
  *        "picture": "https://picture",
  *        "gender": "male",
  *        "createdAt": "2019-11-06T15:43:29.890Z",
  *        "__v": 0
  *    }
  */
-
-/* POST one player */
 playerRouter.post('/', function (req, res, next) {
 
   const plainPassword = req.body.password;
 
-    // hashing the password for security
+    // Hashing the password for security
     bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
     if (err) {
       return next(err);
     }
-
+      // Assign the hashed password to a player
       const newPlayer = new Player(req.body);
       newPlayer.password = hashedPassword;
 
+      // Save player
       newPlayer.save(function (err, savedPlayer) {
         if (err) {
           return next(err);
@@ -218,20 +209,17 @@ playerRouter.post('/', function (req, res, next) {
  *       "firstName": "Lucien",
  *       "lastName": "Pochon",
  *       "pseudo": "LPN",
- *       "birthDate": "1993-12-17T02:24:00.000Z",
+ *       "birthDate": "1993-07-17T02:24:00.000Z",
  *       "picture": "https://blalba",
  *       "gender": "male",
  *       "createdAt": "2019-11-06T15:43:29.890Z",
  *       "__v": 0
  *     }
  */
-  
-/* GET one player by id */
 playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, next) {
 
   res.send(req.player);
 });
-
 
 /**
  * @api {patch} /api/player/:id Partially update a player
@@ -239,6 +227,7 @@ playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, nex
  * @apiGroup Player
  * @apiVersion 1.0.0
  * @apiDescription Partially updates a player's data
+ * All properties are optional.
  * 
  * @apiUse PlayerIdInUrlPath
  * @apiUse PlayerInRequestBody
@@ -263,15 +252,13 @@ playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, nex
  *       "firstName": "Lucien",
  *       "lastName": "Pochon",
  *       "pseudo": "LucienP",
- *       "birthDate": "1993-12-17T02:24:00.000Z",
+ *       "birthDate": "1993-07-17T02:24:00.000Z",
  *       "picture": "https://blalba",
  *       "gender": "male",
  *       "createdAt": "2019-11-06T15:43:29.890Z",
  *       "__v": 0
  *     }
  */
-
-/* PATCH one player by id  */
 playerRouter.patch('/:id', authenticate, loadPlayerFromParamsMiddleware, function (req, res, next) {
 
   Player.findById(req.params.id).exec(async function(err, player) {
@@ -329,10 +316,7 @@ playerRouter.patch('/:id', authenticate, loadPlayerFromParamsMiddleware, functio
       next(err);
     }
   });  
-
-
 });
-
 
 /**
  * @api {delete} /api/player/:id Delete a player
@@ -350,11 +334,7 @@ playerRouter.patch('/:id', authenticate, loadPlayerFromParamsMiddleware, functio
  * @apiSuccessExample 204 No Content
  *     HTTP/1.1 204 No Content
  */
-
-
-/* DELETE one player by id  */ 
 playerRouter.delete('/:id', authenticate, loadPlayerFromParamsMiddleware, function (req, res, next) {
-
 
   Player.findById(req.params.id).exec(function(err, player) {
     
@@ -585,8 +565,5 @@ function addLinkHeader(resourceHref, page, pageSize, total, res) {
  * @apiParam (URL query parameters) {Number{1..100}} [pageSize] The number of elements to retrieve in one page (defaults to 100)
  * @apiSuccess (Response headers) {String} Link Links to the first, previous, next and last pages of the collection (if applicable)
  */
-
-
-
 
 module.exports = playerRouter;

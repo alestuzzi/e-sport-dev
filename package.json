@@ -6,7 +6,7 @@
     "dev": "nodemon",
     "apidoc": "apidoc -i routes -o docs",
     "start": "node ./bin/www",
-     "test": "cross-env MONGODB_URI=mongodb://127.0.0.1/esport-test NODE_ENV=test mocha spec/**/*.spec.js"
+    "test": "cross-env MONGODB_URI=mongodb://127.0.0.1/esport-test NODE_ENV=test mocha spec/**/*.spec.js"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",

@@ -27,13 +27,13 @@ function age( birthDate ) {
   return Math.floor( yearsFromNow( birthDate ) );
 }
 
-
 /**
  * @api {get} /api/team List Teams
  * @apiName RetrieveTeams
  * @apiGroup Team
  * @apiVersion 1.0.0
  * @apiDescription Retrieves a list of the teams
+ * 
  * @apiUse TeamInResponseBody
  *
  *
@@ -43,7 +43,7 @@ function age( birthDate ) {
  * @apiSuccessExample 200 OK
  *     HTTP/1.1 200 OK
  *     Content-Type: application/json
- *     Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel="first prev"
+ *     Link: &lt;https://e-sport-dev.herokuapp.com/api/teams;; rel="first prev"
  *
  *    {
  *       "players": [
@@ -62,48 +62,44 @@ function age( birthDate ) {
  *       "totaPlayers": "6"
  *  }
  */
-
-
-/* GET team listing by name */
 teamRouter.get('/', function (req, res, next) {
   Team.find().sort('name').exec(function(err, team) {
     if (err) {
       return next(err);
     }
 
-  /* aggregation of the teams with the number of players in each team */
-      Team.aggregate([
-        {
-          $unwind: 
-          {
-            path: '$players',
-            preserveNullAndEmptyArrays: true
-          }
-        },
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'players',
-            foreignField: '_id',
-            as: 'playersInTeam'
-          }
-        },
-        
-        {
-          $group: {
-            _id: '$_id',
-            name: { $first: '$name' },
-            players: { $first: '$playersInTeam' },
-            logo: { $first: '$logo' },
-            createdAt: { $first: '$createdAt' },
-            totalPlayers: { $sum: 1 },
-          }
-        },
-        {
-          $sort: {
-            name: 1
-          }
-        },
+  /* Aggregation of the teams with the number of players in each team */
+  Team.aggregate([
+    {
+      $unwind: 
+      {
+        path: '$players',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'players',
+          foreignField: '_id',
+          as: 'playersInTeam'
+        }
+      },
+      {
+        $group: {
+          _id: '$_id',
+          name: { $first: '$name' },
+          players: { $first: '$playersInTeam' },
+          logo: { $first: '$logo' },
+          createdAt: { $first: '$createdAt' },
+          totalPlayers: { $sum: 1 },
+        }
+      },
+      {
+        $sort: {
+          name: 1
+        }
+      },
       ], (err, teams) => {
         if (err) {
           return next(err);
@@ -120,13 +116,9 @@ teamRouter.get('/', function (req, res, next) {
 
           return serialized;
         }));*/
-        
-      });
-
-      
+      });      
   });
 });
-
 
 /**
  * @api {post} /api/team Create a team
@@ -162,7 +154,7 @@ teamRouter.get('/', function (req, res, next) {
  * @apiSuccessExample 201 Created
  *     HTTP/1.1 201 Created
  *     Content-Type: application/json
- *     Location: https://evening-meadow-25867.herokuapp.com/api/movies/58b2926f5e1def0123e97281
+ *     Location: https://e-sport-dev.herokuapp.com/api/teams/5dc1767576846e18643fe750
  *
  *    {
  *       "players": [
@@ -180,10 +172,6 @@ teamRouter.get('/', function (req, res, next) {
  *       "createdAt": "2019-11-11T14:19:21.593Z"
  *    }
  */
-
-
-
-/* POST one team */
 teamRouter.post('/', function (req, res, next) {
 
   new Team(req.body).save(function (err, savedTeam) {
@@ -195,8 +183,6 @@ teamRouter.post('/', function (req, res, next) {
   });
 });
 
-
-
 /**
  * @api {get} /api/team/:id Retrieve a team
  * @apiName RetrieveTeam
@@ -204,6 +190,7 @@ teamRouter.post('/', function (req, res, next) {
  * @apiVersion 1.0.0
  * @apiDescription Retrieves one team.
  *
+ * @apiUse TeamIdInUrlPath
  * @apiUse TeamInResponseBody
  * @apiUse TeamNotFoundError
  *
@@ -230,16 +217,10 @@ teamRouter.post('/', function (req, res, next) {
  *       "createdAt": "2019-11-11T14:19:21.593Z"
  *   }
  */
-  
-
-
- /* GET one team by id */
 teamRouter.get('/:id',loadTeamFromParamsMiddleware, function (req, res, next) {
 
   res.send(req.team);
 });
-
-
 
 /**
  * @api {patch} /api/team/:id Partially update a team
@@ -247,10 +228,13 @@ teamRouter.get('/:id',loadTeamFromParamsMiddleware, function (req, res, next) {
  * @apiGroup Team
  * @apiVersion 1.0.0
  * @apiDescription Partially updates a team's data
- *S
+ * All properties are optional.
+ *
+ * @apiUse TeamIdInUrlPath
  * @apiUse TeamInRequestBody
  * @apiUse TeamInResponseBody
  * @apiUse TeamNotFoundError
+ * @apiUse TeamValidationError
  * 
  *
  * @apiExample Example
@@ -280,10 +264,7 @@ teamRouter.get('/:id',loadTeamFromParamsMiddleware, function (req, res, next) {
  *	    "createdAt": "2019-11-11T14:48:00.175Z"
  *	  }
  */
-
-/* PATCH one team by id  */
 teamRouter.patch('/:id', loadTeamFromParamsMiddleware, function (req, res, next) {
-
 
   // Update only properties present in the request body
   if (req.body.name !== undefined) {
@@ -316,6 +297,7 @@ teamRouter.patch('/:id', loadTeamFromParamsMiddleware, function (req, res, next)
  * @apiDescription Permanently deletes a team.
  *
  * 
+ * @apiUse TeamIdInUrlPath
  * @apiUse TeamNotFoundError
  *
  * @apiExample Example
@@ -324,9 +306,6 @@ teamRouter.patch('/:id', loadTeamFromParamsMiddleware, function (req, res, next)
  * @apiSuccessExample 204 No Content
  *     HTTP/1.1 204 No Content
  */
-
-
-/* DELETE one team by id  */ 
 teamRouter.delete('/:id', loadTeamFromParamsMiddleware, function (req, res, next) {
 
   req.team.remove(function (err) {
@@ -338,10 +317,11 @@ teamRouter.delete('/:id', loadTeamFromParamsMiddleware, function (req, res, next
     res.sendStatus(204);
   });
 });
-  
 
-
-/* FUCTIONS */
+/**
+ * Middleware that loads the team corresponding to the ID in the URL path.
+ * Responds with 404 Not Found if the ID is not valid or the team doesn't exist.
+ */
 function loadTeamFromParamsMiddleware(req, res, next) {
 
   const teamId = req.params.id;
@@ -363,10 +343,17 @@ function loadTeamFromParamsMiddleware(req, res, next) {
   });
 }
 
-/* send an error message if the id is not found */
+/**
+ * Responds with 404 Not Found and a message indicating that the team with the specified ID was not found.
+ */
 function TeamNotFound(res, teamId) {
   return res.status(404).type('text').send(`No team found with that ID ${teamId}`);
 }
+
+/**
+ * @apiDefine TeamIdInUrlPath
+ * @apiParam (URL path parameters) {String} id The unique identifier of the team to retrieve
+ */
 
 /**
  * @apiDefine TeamNotFoundError
@@ -379,7 +366,6 @@ function TeamNotFound(res, teamId) {
  *
  *     No team found with ID 58b4326f5e1def0123e97281
  */
-
 
 /**
  * @apiDefine TeamInRequestBody
@@ -396,5 +382,34 @@ function TeamNotFound(res, teamId) {
  * @apiSuccess (Response body) {Date} createdAt The date at which the player was registered
 */
 
+/**
+ * @apiDefine TeamValidationError
+ *
+ * @apiError {Object} 422/UnprocessableEntity Some of the team's properties are invalid
+ *
+ * @apiErrorExample {json} 422 Unprocessable Entity
+ *     HTTP/1.1 422 Unprocessable Entity
+ *     Content-Type: application/json
+ *
+ *     {
+ *       "message": "Team validation failed",
+ *       "errors": {
+ *         "name": {
+ *           "kind": "minlength",
+ *           "message": "Path `name` (`0`) is shorter than the minimum allowed length (3).",
+ *           "name": "ValidatorError",
+ *           "path": "name",
+ *           "properties": {
+ *             "message": "Path `{PATH}` (`{VALUE}`) is shorter than the minimum allowed length (3).",
+ *             "minlength": 3,
+ *             "path": "name",
+ *             "type": "minlength",
+ *             "value": "0"
+ *           },
+ *           "value": "0"
+ *         }
+ *       }
+ *     }
+ */
 
 module.exports = teamRouter;

@@ -7,7 +7,8 @@ A RESTful API implemented with [Express](http://expressjs.com/). This applicatio
 - [MongoDB](https://www.mongodb.com/)4.x
 
 ### Usage
-```git clone git@github.com:alestuzzi/e-sport-dev.git
+```
+git clone git@github.com:alestuzzi/e-sport-dev.git
 cd e-sport-dev
 npm start
 ```

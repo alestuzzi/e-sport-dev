@@ -10,7 +10,7 @@ const tournamentSchema = new Schema({
         minlength: 3,
     	maxlength: 150,
     },
-    location: [{
+    location: {
       type: {
         type: String,
         required: true,
@@ -24,7 +24,7 @@ const tournamentSchema = new Schema({
           message: '{VALUE} is not a valid longitude/latitude(/altitude) coordinates array'
         }
       }
-    }],
+    },
     teams: [{
         type: Schema.Types.ObjectId,
         ref: 'Team',

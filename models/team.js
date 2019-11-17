@@ -9,6 +9,12 @@ const teamSchema = new Schema({
         unique: true,
         minlength: 3,
         maxlength: 150,
+        validate: {
+          // Manually validate uniqueness to send a "pretty" validation error
+          // rather than a MongoDB duplicate key error
+          validator: validateTeamNameUniqueness,
+          message: 'Team with the name: {VALUE} already exists'
+        }
     },
 
     players: [{
@@ -54,6 +60,17 @@ function validatePlayers(value) {
       })
       .catch(e => { reject(e) });
   })
+}
+
+/*
+ * Given a title, calls the callback function with true if no team exists with that title
+ * (or the only team that exists is the same as the team being validated).
+ */
+function validateTeamNameUniqueness(value) {
+  const TeamModel = mongoose.model('Team', teamSchema);
+  return TeamModel.findOne().where('name').equals(value).exec().then( (existingTeam) => {
+    return !existingTeam || existingTeam._id.equals(this._id)
+  });
 }
 
 

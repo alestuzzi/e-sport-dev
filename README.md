@@ -9,7 +9,8 @@ A RESTful API implemented with [Express](http://expressjs.com/). This applicatio
 ### Usage
 ```git clone git@github.com:alestuzzi/e-sport-dev.git
 cd e-sport-dev
-npm start```
+npm start
+```
 
 Visit [https://e-sport-dev.herokuapp.com/](https://e-sport-dev.herokuapp.com/)
 

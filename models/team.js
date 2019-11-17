@@ -16,11 +16,11 @@ const teamSchema = new Schema({
         ref: 'Player',
         default: null,
         required:true,
-           /* validate: {
+           validate: {
           // Validate that the playersid are valid ObjectId and references existing persons
           validator: validatePlayers,
           message: function(props) { return props.reason.message; }
-            } */
+            } 
     }],
 
     logo: {
@@ -35,22 +35,18 @@ const teamSchema = new Schema({
 
 });
 
-
-
-
-
-
-/* TO DO IMPLEMENTER LA VALIDATION ET SUR TEAM ET TOURNAMENT AUSSI
-function validateTeams(value) {
+// Checks if the player is a valid object
+function validatePlayers(value) {
   return new Promise((resolve, reject) => {
 
     if (!ObjectId.isValid(value)) {
       throw new Error(`playerId is not a valid Person reference`);
     }
 
-    mongoose.model('Player').find({ _id: ObjectId(value) }).exec()
-      .then((player) => {
-        if (!player) {
+    // Checks if the team refers to an existing entry
+    mongoose.model('User').find({ _id: ObjectId(value) }).exec()
+      .then((user) => {
+        if (!user) {
           throw new Error(`playerId does not reference a Person that exists`);
         } else {
           resolve(true);
@@ -58,10 +54,8 @@ function validateTeams(value) {
       })
       .catch(e => { reject(e) });
   })
-
-
 }
-*/
+
 
 // Create the model from the schema and export it
 module.exports = mongoose.model('Team', teamSchema);

@@ -8,7 +8,13 @@ const tournamentSchema = new Schema({
         required: true,
         unique: true,
         minlength: 3,
-    	maxlength: 150,
+      maxlength: 150,
+      validate: {
+        // Manually validate uniqueness to send a "pretty" validation error
+        // rather than a MongoDB duplicate key error
+        validator: validateNameUniqueness,
+        message: 'Tournament with the name: {VALUE} already exists'
+      }
     },
     location: {
       type: {
@@ -71,6 +77,17 @@ function validateTeams(value) {
       })
       .catch(e => { reject(e) });
   })
+}
+
+/*
+ * Given a title, calls the callback function with true if no Tournament exists with that title
+ * (or the only Tournament that exists is the same as the Tournament being validated).
+ */
+function validateNameUniqueness(value) {
+  const TournamentModel = mongoose.model('Tournament', tournamentSchema);
+  return TournamentModel.findOne().where('name').equals(value).exec().then( (existingTournament) => {
+    return !existingTournament || existingTournament._id.equals(this._id)
+  });
 }
 
 // Create the model from the schema and export it

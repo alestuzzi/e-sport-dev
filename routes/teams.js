@@ -88,17 +88,6 @@ teamRouter.get('/', function (req, res, next) {
         return next(err);
       }
       res.send(team);
-      /*
-      res.send(teams.map(team => {
-
-        // Transform the aggregated object into a Mongoose model.
-        const serialized = new Team(team).toJSON();
-
-        // Add the aggregated property.
-        serialized.totalPlayers = team.totalPlayers;
-
-        return serialized;
-      }));*/
     });
   });
 });

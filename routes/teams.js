@@ -32,10 +32,6 @@ const { availableTeam } = require('../dispatcher')
  *       "players": [
  *           "111154f23437342a74ffe121",
  *           "333154f23437342a74ffe122",
- *           "333454f23437342a74ffe123",
- *           "333154f23437342a74ffe124",
- *           "333154f23437342a74ffe125",
- *           "333154f23437342a74ffe126"
  *       ],
  *       "_id": "5dc1767576846e18643fe750",
  *       "name": "Orlando",
@@ -43,6 +39,32 @@ const { availableTeam } = require('../dispatcher')
  *       "__v": 5,
  *       "createdAt": "2019-11-11T14:19:21.593Z",
  *       "totaPlayers": "6"
+ *       "playersInTeam": [
+ *           {
+ *               "_id": "111154f23437342a74ffe121",
+ *               "firstName": "John",
+ *               "lastName": "Doe",
+ *               "pseudo": "jd",
+ *               "password": "$2b$10$4XEsFBXnbR0eF7QtaES2FuDmT/HX8CvJxjXLB2flHcv2tlAvEOz5q",
+ *               "birthDate": "1995-12-17T02:24:00.000Z",
+ *               "picture": "https://wwww.example.com/jd.jpg",
+ *               "gender": "male",
+ *               "createdAt": "2019-11-07T10:07:24.445Z",
+ *               "__v": 0
+ *           },
+ *           {
+ *               "_id": "333154f23437342a74ffe122",
+ *               "firstName": "Jannet",
+ *               "lastName": "Doe",
+ *               "pseudo": "jad",
+ *               "password": "$2b$10$5UITHwF.x1f4QpNTEwlIiuwhcxQrta0m96gasf1f3t4fMuCARn3JG",
+ *               "birthDate": "1995-03-17T02:24:00.000Z",
+ *               "picture": "https://wwww.example.com/jad.jpg",
+ *             "gender": "female",
+ *               "createdAt": "2019-11-07T10:19:08.304Z",
+ *               "__v": 0
+ *           }
+ *       ]
  *  }
  */
 teamRouter.get('/', function (req, res, next) {
@@ -51,7 +73,7 @@ teamRouter.get('/', function (req, res, next) {
       return next(err);
     }
 
-    // Aggregation of the teams with the number of players in each team, if the team has no player, total Players will return 1, we are aware of this bug
+    // Aggregation of the teams with the number of players in each team, if the team has no player, total Players will return 1, we are investigating this bug
     Team.aggregate([
       {
         $unwind: 
@@ -95,6 +117,7 @@ teamRouter.get('/', function (req, res, next) {
 
         // Add the aggregated property.
         serialized.totalPlayers = team.totalPlayers;
+        serialized.playersInTeam = team.playersInTeam;
 
         return serialized;
       }));
@@ -189,16 +212,38 @@ teamRouter.post('/', function (req, res, next) {
  *       "players": [
  *           "111154f23437342a74ffe124",
  *           "333154f23437342a74ffe124",
- *           "333454f23437342a74ffe124",
- *           "333154f23437342a74ffe124",
- *           "333154f23437342a74ffe124",
- *           "333154f23437342a74ffe124"
  *       ],
- *       "_id": "5dc1767576846e18643fe750",
+ *       "_id": "111154f23437342a74ffe124",
  *       "name": "Orldddando",
  *       "logo": "http://exemple.com/logo.jpg",
  *       "__v": 5,
  *       "createdAt": "2019-11-11T14:19:21.593Z"
+ *       "playersInTeam": [
+ *           {
+ *               "_id": "111154f23437342a74ffe121",
+ *               "firstName": "John",
+ *               "lastName": "Doe",
+ *               "pseudo": "jd",
+ *               "password": "$2b$10$4XEsFBXnbR0eF7QtaES2FuDmT/HX8CvJxjXLB2flHcv2tlAvEOz5q",
+ *               "birthDate": "1995-12-17T02:24:00.000Z",
+ *               "picture": "https://wwww.example.com/jd.jpg",
+ *               "gender": "male",
+ *               "createdAt": "2019-11-07T10:07:24.445Z",
+ *               "__v": 0
+ *           },
+ *           {
+ *               "_id": "333154f23437342a74ffe124",
+ *               "firstName": "Jannet",
+ *               "lastName": "Doe",
+ *               "pseudo": "jad",
+ *               "password": "$2b$10$5UITHwF.x1f4QpNTEwlIiuwhcxQrta0m96gasf1f3t4fMuCARn3JG",
+ *               "birthDate": "1995-03-17T02:24:00.000Z",
+ *               "picture": "https://wwww.example.com/jad.jpg",
+ *             "gender": "female",
+ *               "createdAt": "2019-11-07T10:19:08.304Z",
+ *               "__v": 0
+ *           }
+ *       ]
  *   }
  */
 teamRouter.get('/:id', loadTeamFromParamsMiddleware, function (req, res, next) {

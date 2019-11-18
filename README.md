@@ -36,7 +36,7 @@ You can:
 * POST, GET, PATCH or DELETE a player
 * POST, GET, PATCH or DELETE a team
 * POST, GET, PATCH or DELETE a tournament
-* GET a list of all palyers, team or tournament
+* GET a list of all players, team or tournament
 * GET a list of player with the same age and/or the gender of the player
 * Get a aggredated data with the average age of players  
 * Register / Authenticate to the API
@@ -72,8 +72,8 @@ We instance it in `bin/www`
 
 In `disposer.js` we use :  
 
-* availableTeam() count and retrieve the content of all the teams in the DB
-* availableTournament() count and retrive the content of all the tournaments in the DB 
+* `availableTeam()` count and retrieve the content of all the teams in the DB
+* `availableTournament()` count and retrive the content of all the tournaments in the DB 
 
 
 The message will be send when: 
@@ -127,11 +127,10 @@ The message format is generated in JSON, like this :
 
 #### Useful links 
 
-[Documentation](https://e-sport-dev.herokuapp.com/)
-
-[Express](https://expressjs.com)
-[Mongo](https://www.mongodb.com)
-[Node](https://nodejs.org/)
-[NPM](https://docs.npmjs.com/)
-[POSTMAN (can send request to test API)](https://www.getpostman.com/downloads/)
+* [Documentation](https://e-sport-dev.herokuapp.com/)
+* [Express](https://expressjs.com)
+* [Mongo](https://www.mongodb.com)
+* [Node](https://nodejs.org/)
+* [NPM](https://docs.npmjs.com/)
+* [POSTMAN (can send request to test API)](https://www.getpostman.com/downloads/)
 

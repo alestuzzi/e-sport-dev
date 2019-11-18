@@ -87,6 +87,8 @@ teamRouter.get('/', function (req, res, next) {
       if (err) {
         return next(err);
       }
+      res.send(team);
+
       //res.send(team);
       
       res.send(teams.map(team => {

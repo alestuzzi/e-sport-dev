@@ -46,13 +46,13 @@ const { availableTeam } = require('../dispatcher')
  *  }
  */
 teamRouter.get('/', function (req, res, next) {
-  Team.find().sort('name').exec(function(err, team) {
+  Team.find().sort('name').exec(function (err, team) {
     if (err) {
       return next(err);
     }
 
-  /* Aggregation of the teams with the number of players in each team */
-  Team.aggregate([
+    // Aggregation of the teams with the number of players in each team 
+    Team.aggregate([
     {
       $unwind: 
       {
@@ -102,6 +102,7 @@ teamRouter.get('/', function (req, res, next) {
           return serialized;
         }));
       });      
+
   });
 });
 
@@ -204,7 +205,7 @@ teamRouter.post('/', function (req, res, next) {
  *       "createdAt": "2019-11-11T14:19:21.593Z"
  *   }
  */
-teamRouter.get('/:id',loadTeamFromParamsMiddleware, function (req, res, next) {
+teamRouter.get('/:id', loadTeamFromParamsMiddleware, function (req, res, next) {
 
   res.send(req.team);
 });
@@ -275,7 +276,7 @@ teamRouter.patch('/:id', loadTeamFromParamsMiddleware, function (req, res, next)
     res.send(savedTeam);
   });
 });
-  
+
 /**
  * @api {delete} /api/team/:id Delete a team
  * @apiName DeleteTeam

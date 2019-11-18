@@ -25,4 +25,4 @@ Use the $DATABASE_URL or the $MONGODB_URI environment variables to specify a dif
 
 This API allows you to work with Players, Tournaments and Teams:
 
-Read the full [documentation](aUpdate) to know more.
+Read the full [documentation](https://e-sport-dev.herokuapp.com/) to know more.

@@ -51,14 +51,24 @@ teamRouter.get('/', function (req, res, next) {
       return next(err);
     }
 
-    // Aggregation of the teams with the number of players in each team 
+    // Aggregation of the teams with the number of players in each team, if the team has no player, total Players will return 1, we are aware of this bug
     Team.aggregate([
       {
-        $unwind:
-        {
-          path: '$players',
-          preserveNullAndEmptyArrays: true
-        }
+        $unwind: 
+      {
+        path: '$players',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+     {
+      $group: {
+        players: { $addToSet: '$players'} ,
+        _id: '$_id',
+        name: { $first: '$name' },
+        logo: { $first: '$logo' },
+        createdAt: { $first: '$createdAt' },
+        totalPlayers: { $sum: 1 },
+      }
       },
       {
         $lookup: {
@@ -66,16 +76,6 @@ teamRouter.get('/', function (req, res, next) {
           localField: 'players',
           foreignField: '_id',
           as: 'playersInTeam'
-        }
-      },
-      {
-        $group: {
-          _id: '$_id',
-          name: { $first: '$name' },
-          players: { $first: '$playersInTeam' },
-          logo: { $first: '$logo' },
-          createdAt: { $first: '$createdAt' },
-          totalPlayers: { $sum: 1 },
         }
       },
       {
@@ -88,6 +88,19 @@ teamRouter.get('/', function (req, res, next) {
         return next(err);
       }
       res.send(team);
+
+      //res.send(team);
+      
+      res.send(teams.map(team => {
+
+        // Transform the aggregated object into a Mongoose model.
+        const serialized = new Team(team).toJSON();
+
+        // Add the aggregated property.
+        serialized.totalPlayers = team.totalPlayers;
+
+        return serialized;
+      }));
     });
   });
 });

@@ -28,11 +28,12 @@ const { availableTournament } = require('../dispatcher');
  *
  *		{
  *		    "location": {
- *		        "coordinates": [
- *		            102,
- *		            0.5
- *		        ]
- *		    },
+ *           "type": "Point",
+ *           "coordinates": [
+ *               -73.856077,
+ *               40.848447
+ *           ]
+ *       },
  *		    "teams": [
  *		        "111154f23437342a74ffe121",
  *		        "333154f23437342a74ffe122",
@@ -41,6 +42,7 @@ const { availableTournament } = require('../dispatcher');
  *		        "333154f23437342a74ffe125",
  *		        "333154f23437342a74ffe126"
  *		    ],
+ *         "name": "Tournament Exemple"
  *		    "_id": "5dc976e4fcd1fd5ae0cc8f39",
  *		    "createdAt": "2019-11-11T14:57:40.470Z",
  *		    "__v": 0
@@ -74,7 +76,11 @@ tournamentRouter.get('/', function (req, res, next) {
  *
  *   {
  *       "location": {
- *           "coordinates": [102.0, 0.5]
+ *           "type": "Point",
+ *           "coordinates": [
+ *               -73.856077,
+ *               40.848447
+ *           ]
  *       },
  *       "teams": [
  *           "111154f23437342a74ffe121",
@@ -85,6 +91,9 @@ tournamentRouter.get('/', function (req, res, next) {
  *           "333154f23437342a74ffe126"
  *       ],
  *       "name": "Tournament Exemple"
+ *		    "_id": "5dc976e4fcd1fd5ae0cc8f39",
+ *		    "createdAt": "2019-11-11T14:57:40.470Z",
+ *		    "__v": 0
  *   }
  *
  *
@@ -95,11 +104,12 @@ tournamentRouter.get('/', function (req, res, next) {
  *
  *		{
  *		    "location": {
- *		        "coordinates": [
- *		            102,
- *		            0.5
- * 		        ]
- *		    },
+ *           "type": "Point",
+ *           "coordinates": [
+ *               -73.856077,
+ *               40.848447
+ *           ]
+ *       },
  *		    "teams": [
  *		        "111154f23437342a74ffe121",
  *		        "333154f23437342a74ffe122",
@@ -151,11 +161,12 @@ tournamentRouter.post('/', function (req, res, next) {
  *
  *		 {
  * 		    "location": {
- * 		        "coordinates": [
- *		            102,
- *		            0.5
- *		        ]
- *		    },
+ *           "type": "Point",
+ *           "coordinates": [
+ *               -73.856077,
+ *               40.848447
+ *           ]
+ *       },
  *		    "teams": [
  *		        "111154f23437342a74ffe121",
  *		        "333154f23437342a74ffe122",
@@ -195,7 +206,12 @@ tournamentRouter.get('/:id', loadTournamentFromParamsMiddleware, function (req, 
  *
  *    {
  *      "location": {
- *          "coordinates": [102.0, 0.5]}
+ *           "type": "Point",
+ *           "coordinates": [
+ *               -73.856077,
+ *               40.848447
+ *           ]
+ *      },
  *   }
  *
  * @apiSuccessExample 200 OK
@@ -204,10 +220,11 @@ tournamentRouter.get('/:id', loadTournamentFromParamsMiddleware, function (req, 
  *
  *	{
  *	    "location": {
- *	        "coordinates": [
- *	            102,
- *	            0.5
- *	        ]
+ *          "type": "Point",
+ *           "coordinates": [
+ *               -73.856077,
+ *               40.848447
+ *           ]
  *	    },
  *	    "teams": [
  *	        "111154f23437342a74ffe121",

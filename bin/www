@@ -8,6 +8,9 @@ var app = require('../app');
 var debug = require('debug')('e-sport-app:server');
 var http = require('http');
 
+const { createWebsocketBackend } = require('../dispatcher');
+
+
 /**
  * Get port from environment and store in Express.
  */
@@ -20,6 +23,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+createWebsocketBackend(server);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -88,3 +92,6 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+
+

@@ -7,6 +7,9 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const debug = require('debug');
 
+
+const { availableTeam } = require('../dispatcher')
+
 /**
  * @api {get} /api/team List Teams
  * @apiName RetrieveTeams
@@ -36,7 +39,7 @@ const debug = require('debug');
  *       ],
  *       "_id": "5dc1767576846e18643fe750",
  *       "name": "Orlando",
- *       "logo": "http://blabla",
+ *       "logo": "http://exemple.com/logo.jpg",
  *       "__v": 5,
  *       "createdAt": "2019-11-11T14:19:21.593Z",
  *       "totaPlayers": "6"
@@ -127,7 +130,7 @@ teamRouter.get('/', function (req, res, next) {
  *       ],
  *       "_id": "5dc1767576846e18643fe750",
  *       "name": "Orlando",
- *       "logo": "http://blabla"
+ *       "logo": "http://exemple.com/logo.jpg"
  *   }
  *
  *
@@ -147,7 +150,7 @@ teamRouter.get('/', function (req, res, next) {
  *       ],
  *       "_id": "5dc1767576846e18643fe750",
  *       "name": "Orldando",
- *       "logo": "http://blabla",
+ *       "logo": "http://exemple.com/logo.jpg",
  *       "__v": 5,
  *       "createdAt": "2019-11-11T14:19:21.593Z"
  *    }
@@ -158,6 +161,8 @@ teamRouter.post('/', function (req, res, next) {
     if (err) {
       return next(err);
     }
+
+     availableTeam();
 
     res.send(savedTeam);
   });
@@ -192,7 +197,7 @@ teamRouter.post('/', function (req, res, next) {
  *       ],
  *       "_id": "5dc1767576846e18643fe750",
  *       "name": "Orldddando",
- *       "logo": "http://blabla",
+ *       "logo": "http://exemple.com/logo.jpg",
  *       "__v": 5,
  *       "createdAt": "2019-11-11T14:19:21.593Z"
  *   }
@@ -239,7 +244,7 @@ teamRouter.get('/:id', loadTeamFromParamsMiddleware, function (req, res, next) {
  *	    ],
  *	    "_id": "5dc1767576846e18643fe750",
  *	    "name": "Orldddando",
- *	    "logo": "http://blabla",
+ *	    "logo": "http://exemple.com/logo.jpg",
  *	    "__v": 6,
  *	    "createdAt": "2019-11-11T14:48:00.175Z"
  *	  }
@@ -292,6 +297,8 @@ teamRouter.delete('/:id', loadTeamFromParamsMiddleware, function (req, res, next
     if (err) {
       return next(err);
     }
+
+    availableTeam();
 
     debug(`Deleted Team "${req.team.name}"`);
     res.sendStatus(204);

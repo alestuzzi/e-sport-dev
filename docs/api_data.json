@@ -218,6 +218,17 @@
     }
   },
   {
+    "type": "post",
+    "url": "/login",
+    "title": "Log in a player",
+    "name": "LoginPlayer",
+    "group": "Player",
+    "version": "1.0.0",
+    "description": "<p>Logs a player in.</p>",
+    "filename": "routes/players.js",
+    "groupTitle": "Player"
+  },
+  {
     "type": "patch",
     "url": "/api/player/:id",
     "title": "Partially update a player",
@@ -1138,7 +1149,7 @@
       "examples": [
         {
           "title": "201 Created",
-          "content": "    HTTP/1.1 201 Created\n    Content-Type: application/json\n    Location: https://evening-meadow-25867.herokuapp.com/api/movies/58b2926f5e1def0123e97281\n\n\t\t{\n\t\t    \"location\": {\n\t\t        \"coordinates\": [\n\t\t            102,\n\t\t            0.5\n\t\t        ]\n\t\t    },\n\t\t    \"teams\": [\n\t\t        \"111154f23437342a74ffe121\",\n\t\t        \"333154f23437342a74ffe122\",\n\t\t        \"333454f23437342a74ffe123\",\n\t\t        \"333154f23437342a74ffe125\",\n\t\t        \"333154f23437342a74ffe126\"\n\t\t    ],\n\t\t    \"_id\": \"5dc976e4fcd1fd5ae0cc8f39\",\n\t\t    \"name\": \"Tournament Exemple\",\n\t\t    \"createdAt\": \"2019-11-11T14:57:40.470Z\",\n\t\t    \"__v\": 0\n\t\t}",
+          "content": "    HTTP/1.1 201 Created\n    Content-Type: application/json\n    Location: https://e-sport-dev.herokuapp.com/api/tournament/5dc976e4fcd1fd5ae0cc8f39\n\n\t\t{\n\t\t    \"location\": {\n\t\t        \"coordinates\": [\n\t\t            102,\n\t\t            0.5\n\t\t        ]\n\t\t    },\n\t\t    \"teams\": [\n\t\t        \"111154f23437342a74ffe121\",\n\t\t        \"333154f23437342a74ffe122\",\n\t\t        \"333454f23437342a74ffe123\",\n\t\t        \"333154f23437342a74ffe125\",\n\t\t        \"333154f23437342a74ffe126\"\n\t\t    ],\n\t\t    \"_id\": \"5dc976e4fcd1fd5ae0cc8f39\",\n\t\t    \"name\": \"Tournament Exemple\",\n\t\t    \"createdAt\": \"2019-11-11T14:57:40.470Z\",\n\t\t    \"__v\": 0\n\t\t}",
           "type": "json"
         }
       ]
@@ -1179,6 +1190,26 @@
           }
         ]
       }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "Object",
+            "optional": false,
+            "field": "422/UnprocessableEntity",
+            "description": "<p>Some of the team's properties are invalid</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "422 Unprocessable Entity",
+          "content": "HTTP/1.1 422 Unprocessable Entity\nContent-Type: application/json\n\n{\n  \"message\": \"Team validation failed\",\n  \"errors\": {\n    \"name\": {\n      \"kind\": \"minlength\",\n      \"message\": \"Path `name` (`0`) is shorter than the minimum allowed length (3).\",\n      \"name\": \"ValidatorError\",\n      \"path\": \"name\",\n      \"properties\": {\n        \"message\": \"Path `{PATH}` (`{VALUE}`) is shorter than the minimum allowed length (3).\",\n        \"minlength\": 3,\n        \"path\": \"name\",\n        \"type\": \"minlength\",\n        \"value\": \"0\"\n      },\n      \"value\": \"0\"\n    }\n  }\n}",
+          "type": "json"
+        }
+      ]
     }
   },
   {
@@ -1207,6 +1238,19 @@
     },
     "filename": "routes/tournaments.js",
     "groupTitle": "Tournament",
+    "parameter": {
+      "fields": {
+        "URL path parameters": [
+          {
+            "group": "URL path parameters",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The unique identifier of the team to retrieve</p>"
+          }
+        ]
+      }
+    },
     "error": {
       "fields": {
         "Error 4xx": [
@@ -1222,7 +1266,7 @@
       "examples": [
         {
           "title": "404 Not Found",
-          "content": "HTTP/1.1 404 Not Found\nContent-Type: text/plain\n\nNo tournament found with ID 5dc976e4fcd1fd5ae0cc8f39",
+          "content": "HTTP/1.1 404 Not Found\nContent-Type: text/plain\n\nNo tournament found with ID 58b4326f5e1def0123e97281",
           "type": "json"
         }
       ]
@@ -1288,6 +1332,15 @@
     "groupTitle": "Tournament",
     "parameter": {
       "fields": {
+        "URL path parameters": [
+          {
+            "group": "URL path parameters",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The unique identifier of the team to retrieve</p>"
+          }
+        ],
         "Request body": [
           {
             "group": "Request body",
@@ -1323,13 +1376,24 @@
             "optional": false,
             "field": "404/NotFound",
             "description": "<p>No tournament was found corresponding to the ID in the URL path</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Object",
+            "description": "<p>} 422/UnprocessableEntity Some of the tournament's properties are invalid</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "404 Not Found",
-          "content": "HTTP/1.1 404 Not Found\nContent-Type: text/plain\n\nNo tournament found with ID 5dc976e4fcd1fd5ae0cc8f39",
+          "content": "HTTP/1.1 404 Not Found\nContent-Type: text/plain\n\nNo tournament found with ID 58b4326f5e1def0123e97281",
+          "type": "json"
+        },
+        {
+          "title": "422 Unprocessable Entity",
+          "content": "HTTP/1.1 422 Unprocessable Entity\nContent-Type: application/json\n\n{\n  \"message\": \"Tournament validation failed\",\n  \"errors\": {\n    \"name\": {\n      \"kind\": \"minlength\",\n      \"message\": \"Path `name` (`0`) is shorter than the minimum allowed length (3).\",\n      \"name\": \"ValidatorError\",\n      \"path\": \"name\",\n      \"properties\": {\n        \"message\": \"Path `{PATH}` (`{VALUE}`) is shorter than the minimum allowed length (3).\",\n        \"minlength\": 3,\n        \"path\": \"name\",\n        \"type\": \"minlength\",\n        \"value\": \"0\"\n      },\n      \"value\": \"0\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1354,7 +1418,7 @@
       "examples": [
         {
           "title": "200 OK",
-          "content": "    HTTP/1.1 200 OK\n    Content-Type: application/json\n    Link: &lt;https://evening-meadow-25867.herokuapp.com/api/movies?page=1&pageSize=50&gt;; rel=\"first prev\"\n\n\t\t{\n\t\t    \"location\": {\n\t\t        \"coordinates\": [\n\t\t            102,\n\t\t            0.5\n\t\t        ]\n\t\t    },\n\t\t    \"teams\": [\n\t\t        \"111154f23437342a74ffe121\",\n\t\t        \"333154f23437342a74ffe122\",\n\t\t        \"333454f23437342a74ffe123\",\n\t\t        \"333154f23437342a74ffe124\",\n\t\t        \"333154f23437342a74ffe125\",\n\t\t        \"333154f23437342a74ffe126\"\n\t\t    ],\n\t\t    \"_id\": \"5dc976e4fcd1fd5ae0cc8f39\",\n\t\t    \"createdAt\": \"2019-11-11T14:57:40.470Z\",\n\t\t    \"__v\": 0\n\t\t}",
+          "content": "    HTTP/1.1 200 OK\n    Content-Type: application/json\n    Link: &lt;https://e-sport-dev.herokuapp.com/api/tournament;; rel=\"first prev\"\n\n\t\t{\n\t\t    \"location\": {\n\t\t        \"coordinates\": [\n\t\t            102,\n\t\t            0.5\n\t\t        ]\n\t\t    },\n\t\t    \"teams\": [\n\t\t        \"111154f23437342a74ffe121\",\n\t\t        \"333154f23437342a74ffe122\",\n\t\t        \"333454f23437342a74ffe123\",\n\t\t        \"333154f23437342a74ffe124\",\n\t\t        \"333154f23437342a74ffe125\",\n\t\t        \"333154f23437342a74ffe126\"\n\t\t    ],\n\t\t    \"_id\": \"5dc976e4fcd1fd5ae0cc8f39\",\n\t\t    \"createdAt\": \"2019-11-11T14:57:40.470Z\",\n\t\t    \"__v\": 0\n\t\t}",
           "type": "json"
         }
       ],
@@ -1452,6 +1516,43 @@
     },
     "filename": "routes/tournaments.js",
     "groupTitle": "Tournament",
+    "parameter": {
+      "fields": {
+        "URL path parameters": [
+          {
+            "group": "URL path parameters",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The unique identifier of the team to retrieve</p>"
+          }
+        ],
+        "Request body": [
+          {
+            "group": "Request body",
+            "type": "String",
+            "size": "3..150",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The name of the tournament (must be unique)</p>"
+          },
+          {
+            "group": "Request body",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "teams",
+            "description": "<p>Array of id's of the teams in the tournament</p>"
+          },
+          {
+            "group": "Request body",
+            "type": "String",
+            "optional": true,
+            "field": "Number",
+            "description": "<p>location Coordinates of the tournament</p>"
+          }
+        ]
+      }
+    },
     "error": {
       "fields": {
         "Error 4xx": [
@@ -1461,13 +1562,24 @@
             "optional": false,
             "field": "404/NotFound",
             "description": "<p>No tournament was found corresponding to the ID in the URL path</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Object",
+            "description": "<p>} 422/UnprocessableEntity Some of the tournament's properties are invalid</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "404 Not Found",
-          "content": "HTTP/1.1 404 Not Found\nContent-Type: text/plain\n\nNo tournament found with ID 5dc976e4fcd1fd5ae0cc8f39",
+          "content": "HTTP/1.1 404 Not Found\nContent-Type: text/plain\n\nNo tournament found with ID 58b4326f5e1def0123e97281",
+          "type": "json"
+        },
+        {
+          "title": "422 Unprocessable Entity",
+          "content": "HTTP/1.1 422 Unprocessable Entity\nContent-Type: application/json\n\n{\n  \"message\": \"Tournament validation failed\",\n  \"errors\": {\n    \"name\": {\n      \"kind\": \"minlength\",\n      \"message\": \"Path `name` (`0`) is shorter than the minimum allowed length (3).\",\n      \"name\": \"ValidatorError\",\n      \"path\": \"name\",\n      \"properties\": {\n        \"message\": \"Path `{PATH}` (`{VALUE}`) is shorter than the minimum allowed length (3).\",\n        \"minlength\": 3,\n        \"path\": \"name\",\n        \"type\": \"minlength\",\n        \"value\": \"0\"\n      },\n      \"value\": \"0\"\n    }\n  }\n}",
           "type": "json"
         }
       ]

@@ -46,20 +46,20 @@ const { availableTeam } = require('../dispatcher')
  *  }
  */
 teamRouter.get('/', function (req, res, next) {
-  Team.find().sort('name').exec(function(err, team) {
+  Team.find().sort('name').exec(function (err, team) {
     if (err) {
       return next(err);
     }
 
-  /* Aggregation of the teams with the number of players in each team */
-  Team.aggregate([
-    {
-      $unwind: 
+    // Aggregation of the teams with the number of players in each team 
+    Team.aggregate([
       {
-        path: '$players',
-        preserveNullAndEmptyArrays: true
-      }
-    },
+        $unwind:
+        {
+          path: '$players',
+          preserveNullAndEmptyArrays: true
+        }
+      },
       {
         $lookup: {
           from: 'users',
@@ -83,23 +83,23 @@ teamRouter.get('/', function (req, res, next) {
           name: 1
         }
       },
-      ], (err, teams) => {
-        if (err) {
-          return next(err);
-        }
-        res.send(team);
-        /*
-        res.send(teams.map(team => {
+    ], (err, teams) => {
+      if (err) {
+        return next(err);
+      }
+      res.send(team);
+      /*
+      res.send(teams.map(team => {
 
-          // Transform the aggregated object into a Mongoose model.
-          const serialized = new Team(team).toJSON();
+        // Transform the aggregated object into a Mongoose model.
+        const serialized = new Team(team).toJSON();
 
-          // Add the aggregated property.
-          serialized.totalPlayers = team.totalPlayers;
+        // Add the aggregated property.
+        serialized.totalPlayers = team.totalPlayers;
 
-          return serialized;
-        }));*/
-      });      
+        return serialized;
+      }));*/
+    });
   });
 });
 
@@ -202,7 +202,7 @@ teamRouter.post('/', function (req, res, next) {
  *       "createdAt": "2019-11-11T14:19:21.593Z"
  *   }
  */
-teamRouter.get('/:id',loadTeamFromParamsMiddleware, function (req, res, next) {
+teamRouter.get('/:id', loadTeamFromParamsMiddleware, function (req, res, next) {
 
   res.send(req.team);
 });
@@ -273,7 +273,7 @@ teamRouter.patch('/:id', loadTeamFromParamsMiddleware, function (req, res, next)
     res.send(savedTeam);
   });
 });
-  
+
 /**
  * @api {delete} /api/team/:id Delete a team
  * @apiName DeleteTeam

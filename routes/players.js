@@ -349,7 +349,7 @@ playerRouter.delete('/:id', authenticate, loadPlayerFromParamsMiddleware, functi
   });
 });
 
-/** A VERIFIER
+/**
  * @api {post} /login Log in a player
  * @apiName LoginPlayer
  * @apiGroup Player

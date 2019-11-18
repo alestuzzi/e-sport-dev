@@ -51,7 +51,7 @@ teamRouter.get('/', function (req, res, next) {
       return next(err);
     }
 
-    // Aggregation of the teams with the number of players in each team 
+    // Aggregation of the teams with the number of players in each team, if the team has no player, total Players will return 1, we are aware of this bug
     Team.aggregate([
       {
         $unwind: 

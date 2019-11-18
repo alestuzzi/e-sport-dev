@@ -66,53 +66,53 @@ playerRouter.get('/', function (req, res, next) {
 
   //Count total players matching the URL query parameters
   const countQuery = Player.find();
-  countQuery.count(function (err, total){
+  countQuery.count(function (err, total) {
     if (err) {
       return next(err);
     }
-  // Prepare the initial database query from the URL query parameters
-  let query = Player.find();
+    // Prepare the initial database query from the URL query parameters
+    let query = Player.find();
 
-  // Parse pagination parameters from URL query parameters
-  const { page, pageSize } = getPaginationParameters(req)
+    // Parse pagination parameters from URL query parameters
+    const { page, pageSize } = getPaginationParameters(req)
 
-  // Filter players by gender
-  if (req.query.gender) {
-    switch (req.query.gender){
-      case 'female':
-        console.log('female filter');
-        query = query.where('gender').equals('female');
-        break;
-      case 'male':
-        query = query.where('gender').equals('male'); 
-        break;
-    } 
-  }
-
-  // Filter players by age 
-  if (req.query.age) {
-  
-    const age = parseInt(req.query.age, 10);
-
-    const upperBound = moment().subtract(age, 'years').toDate();
-    const lowerBound = moment(upperBound).subtract(1, 'year').toDate();
-    
-    query = query.where('birthDate').gte(lowerBound).lte(upperBound);
-
-  }
-
-  // Apply the pagination to the database query
-  query = query.skip((page - 1) * pageSize).limit(pageSize);
-
-  // Add the Link header to the response
-  addLinkHeader('/api/player', page, pageSize, total, res);
-  query.sort('pseudo').exec(function(err, users) {
-    if (err) {
-      return next(err);
+    // Filter players by gender
+    if (req.query.gender) {
+      switch (req.query.gender) {
+        case 'female':
+          console.log('female filter');
+          query = query.where('gender').equals('female');
+          break;
+        case 'male':
+          query = query.where('gender').equals('male');
+          break;
+      }
     }
-    res.send(users);
+
+    // Filter players by age 
+    if (req.query.age) {
+
+      const age = parseInt(req.query.age, 10);
+
+      const upperBound = moment().subtract(age, 'years').toDate();
+      const lowerBound = moment(upperBound).subtract(1, 'year').toDate();
+
+      query = query.where('birthDate').gte(lowerBound).lte(upperBound);
+
+    }
+
+    // Apply the pagination to the database query
+    query = query.skip((page - 1) * pageSize).limit(pageSize);
+
+    // Add the Link header to the response
+    addLinkHeader('/api/player', page, pageSize, total, res);
+    query.sort('pseudo').exec(function (err, users) {
+      if (err) {
+        return next(err);
+      }
+      res.send(users);
     });
-  }); 
+  });
 });
 
 /**
@@ -163,23 +163,23 @@ playerRouter.post('/', function (req, res, next) {
 
   const plainPassword = req.body.password;
 
-    // Hashing the password for security
-    bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
+  // Hashing the password for security
+  bcrypt.hash(plainPassword, saltRounds, function (err, hashedPassword) {
     if (err) {
       return next(err);
     }
-      // Assign the hashed password to a player
-      const newPlayer = new Player(req.body);
-      newPlayer.password = hashedPassword;
+    // Assign the hashed password to a player
+    const newPlayer = new Player(req.body);
+    newPlayer.password = hashedPassword;
 
-      // Save player
-      newPlayer.save(function (err, savedPlayer) {
-        if (err) {
-          return next(err);
-        }
+    // Save player
+    newPlayer.save(function (err, savedPlayer) {
+      if (err) {
+        return next(err);
+      }
 
-        res.send(savedPlayer);
-      });
+      res.send(savedPlayer);
+    });
   });
 });
 
@@ -258,8 +258,8 @@ playerRouter.get('/:id', loadPlayerFromParamsMiddleware, function (req, res, nex
  */
 playerRouter.patch('/:id', authenticate, loadPlayerFromParamsMiddleware, function (req, res, next) {
 
-  Player.findById(req.params.id).exec(async function(err, player) {
-    
+  Player.findById(req.params.id).exec(async function (err, player) {
+
     if (err) {
       return next(err);
     }
@@ -312,7 +312,7 @@ playerRouter.patch('/:id', authenticate, loadPlayerFromParamsMiddleware, functio
     } catch (err) {
       next(err);
     }
-  });  
+  });
 });
 
 /**
@@ -333,8 +333,8 @@ playerRouter.patch('/:id', authenticate, loadPlayerFromParamsMiddleware, functio
  */
 playerRouter.delete('/:id', authenticate, loadPlayerFromParamsMiddleware, function (req, res, next) {
 
-  Player.findById(req.params.id).exec(function(err, player) {
-    
+  Player.findById(req.params.id).exec(function (err, player) {
+
     if (err) {
       return next(err);
     }
@@ -344,26 +344,32 @@ playerRouter.delete('/:id', authenticate, loadPlayerFromParamsMiddleware, functi
       return res.status(403).send('Do not delete another player, not cool.')
     }
 
-     debug(`Deleted Player "${req.player.pseudo}"`);
-     res.sendStatus(204);
+    debug(`Deleted Player "${req.player.pseudo}"`);
+    res.sendStatus(204);
   });
 });
 
-/* LOGIN  */ 
-
-playerRouter.post('/login', function(req, res, next) {
+/** A VERIFIER
+ * @api {post} /login Log in a player
+ * @apiName LoginPlayer
+ * @apiGroup Player
+ * @apiVersion 1.0.0
+ * @apiDescription Logs a player in.
+ * 
+ */
+playerRouter.post('/login', function (req, res, next) {
   // Find the user by pseudo.
-  Player.findOne({ pseudo: req.body.pseudo }).exec(function(err, player) {
+  Player.findOne({ pseudo: req.body.pseudo }).exec(function (err, player) {
     if (err) { return next(err); }
     else if (!player) { return res.sendStatus(401); }
     // Validate the password.
-    bcrypt.compare(req.body.password, player.password, function(err, valid) {
+    bcrypt.compare(req.body.password, player.password, function (err, valid) {
       if (err) { return next(err); }
       else if (!valid) { return res.sendStatus(401); }
       // Generate a valid JWT which expires in 7 days.
       const exp = (new Date().getTime() + 7 * 24 * 3600 * 1000) / 1000;
       const claims = { sub: player._id.toString(), exp: exp };
-      jwt.sign(claims, secretKey, function(err, token) {
+      jwt.sign(claims, secretKey, function (err, token) {
         if (err) { return next(err); }
         res.send({ token: token }); // Send the token to the client.
       });
@@ -417,7 +423,7 @@ function authenticate(req, res, next) {
   }
   // Extract and verify the JWT.
   const token = match[1];
-  jwt.verify(token, secretKey, function(err, payload) {
+  jwt.verify(token, secretKey, function (err, payload) {
     if (err) {
       return res.status(401).send('Your token is invalid or has expired');
     } else {
@@ -434,7 +440,7 @@ function authenticate(req, res, next) {
  * @returns An object with "page" and "pageSize" properties
  */
 
-function getPaginationParameters (req) {
+function getPaginationParameters(req) {
 
   // Parse the "page" URL query parameter indicating the index of the first element that should be in the response
   let page = parseInt(req.query.page, 10);
@@ -449,7 +455,7 @@ function getPaginationParameters (req) {
   }
 
   return { page, pageSize };
-}; 
+};
 
 /**
  * Adds a Link header to the response (if applicable).
@@ -556,14 +562,11 @@ function addLinkHeader(resourceHref, page, pageSize, total, res) {
  * 
  */
 
- /**
- * @apiDefine Pagination
- * @apiParam (URL query parameters) {Number{1..}} [page] The page to retrieve (defaults to 1)
- * @apiParam (URL query parameters) {Number{1..100}} [pageSize] The number of elements to retrieve in one page (defaults to 100)
- * @apiSuccess (Response headers) {String} Link Links to the first, previous, next and last pages of the collection (if applicable)
- */
-
-
-
+/**
+* @apiDefine Pagination
+* @apiParam (URL query parameters) {Number{1..}} [page] The page to retrieve (defaults to 1)
+* @apiParam (URL query parameters) {Number{1..100}} [pageSize] The number of elements to retrieve in one page (defaults to 100)
+* @apiSuccess (Response headers) {String} Link Links to the first, previous, next and last pages of the collection (if applicable)
+*/
 
 module.exports = playerRouter;

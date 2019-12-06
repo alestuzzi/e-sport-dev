@@ -377,7 +377,7 @@ function loadTeamFromParamsMiddleware(req, res, next) {
 /**
  * Responds with 404 Not Found and a message indicating that the team with the specified ID was not found.
  */
-function TeamNotFound(res, teamId) {
+function teamNotFound(res, teamId) {
   return res.status(404).type('text').send(`No team found with that ID ${teamId}`);
 }
 

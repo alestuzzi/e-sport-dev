@@ -135,7 +135,7 @@ playerRouter.get('/', function (req, res, next) {
  *       "firstName": "Lucien",
  *       "lastName": "Pochon",
  *       "pseudo": "LucienP",
- *       "password": "changeme"
+ *       "password": "changeme",
  *       "birthDate": "1993-07-17T02:24:00.000Z",
  *       "picture": "https://blalba",
  *       "gender": "male",

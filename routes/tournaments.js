@@ -42,7 +42,7 @@ const { availableTournament } = require('../dispatcher');
  *		        "333154f23437342a74ffe125",
  *		        "333154f23437342a74ffe126"
  *		    ],
- *         "name": "Tournament Exemple"
+ *         "name": "Tournament Exemple",
  *		    "_id": "5dc976e4fcd1fd5ae0cc8f39",
  *		    "createdAt": "2019-11-11T14:57:40.470Z",
  *		    "__v": 0
@@ -327,7 +327,7 @@ function loadTournamentFromParamsMiddleware(req, res, next) {
 /**
  * Responds with 404 Not Found and a message indicating that the team with the specified ID was not found.
  */
-function TournamentNotFound(res, tournamentId) {
+function tournamentNotFound(res, tournamentId) {
   return res.status(404).type('text').send(`No tournament found with that ID ${tournamentId}`);
 }
 

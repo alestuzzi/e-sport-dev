@@ -966,7 +966,7 @@
       "examples": [
         {
           "title": "200 OK",
-          "content": "  HTTP/1.1 200 OK\n  Content-Type: application/json\n\n{\n    \"players\": [\n        \"111154f23437342a74ffe124\",\n        \"333154f23437342a74ffe124\",\n    ],\n    \"_id\": \"111154f23437342a74ffe124\",\n    \"name\": \"Orldddando\",\n    \"logo\": \"http://exemple.com/logo.jpg\",\n    \"__v\": 5,\n    \"createdAt\": \"2019-11-11T14:19:21.593Z\"\n    \"playersInTeam\": [\n        {\n            \"_id\": \"111154f23437342a74ffe121\",\n            \"firstName\": \"John\",\n            \"lastName\": \"Doe\",\n            \"pseudo\": \"jd\",\n            \"password\": \"$2b$10$4XEsFBXnbR0eF7QtaES2FuDmT/HX8CvJxjXLB2flHcv2tlAvEOz5q\",\n            \"birthDate\": \"1995-12-17T02:24:00.000Z\",\n            \"picture\": \"https://wwww.example.com/jd.jpg\",\n            \"gender\": \"male\",\n            \"createdAt\": \"2019-11-07T10:07:24.445Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"333154f23437342a74ffe124\",\n            \"firstName\": \"Jannet\",\n            \"lastName\": \"Doe\",\n            \"pseudo\": \"jad\",\n            \"password\": \"$2b$10$5UITHwF.x1f4QpNTEwlIiuwhcxQrta0m96gasf1f3t4fMuCARn3JG\",\n            \"birthDate\": \"1995-03-17T02:24:00.000Z\",\n            \"picture\": \"https://wwww.example.com/jad.jpg\",\n          \"gender\": \"female\",\n            \"createdAt\": \"2019-11-07T10:19:08.304Z\",\n            \"__v\": 0\n        }\n    ]\n}",
+          "content": "  HTTP/1.1 200 OK\n  Content-Type: application/json\n\n{\n    \"players\": [\n        \"111154f23437342a74ffe124\",\n        \"333154f23437342a74ffe124\",\n        \"333454f23437342a74ffe124\",\n        \"333154f23437342a74ffe124\",\n        \"333154f23437342a74ffe124\",\n        \"333154f23437342a74ffe124\"\n    ],\n    \"_id\": \"5dc1767576846e18643fe750\",\n    \"name\": \"Orldddando\",\n    \"logo\": \"http://exemple.com/logo.jpg\",\n    \"__v\": 5,\n    \"createdAt\": \"2019-11-11T14:19:21.593Z\"\n}",
           "type": "json"
         }
       ],
@@ -1058,7 +1058,7 @@
       "examples": [
         {
           "title": "200 OK",
-          "content": "   HTTP/1.1 200 OK\n   Content-Type: application/json\n   Link: &lt;https://e-sport-dev.herokuapp.com/api/teams;; rel=\"first prev\"\n\n  {\n     \"players\": [\n         \"111154f23437342a74ffe121\",\n         \"333154f23437342a74ffe122\",\n     ],\n     \"_id\": \"5dc1767576846e18643fe750\",\n     \"name\": \"Orlando\",\n     \"logo\": \"http://exemple.com/logo.jpg\",\n     \"__v\": 5,\n     \"createdAt\": \"2019-11-11T14:19:21.593Z\",\n     \"totaPlayers\": \"6\"\n     \"playersInTeam\": [\n         {\n             \"_id\": \"111154f23437342a74ffe121\",\n             \"firstName\": \"John\",\n             \"lastName\": \"Doe\",\n             \"pseudo\": \"jd\",\n             \"password\": \"$2b$10$4XEsFBXnbR0eF7QtaES2FuDmT/HX8CvJxjXLB2flHcv2tlAvEOz5q\",\n             \"birthDate\": \"1995-12-17T02:24:00.000Z\",\n             \"picture\": \"https://wwww.example.com/jd.jpg\",\n             \"gender\": \"male\",\n             \"createdAt\": \"2019-11-07T10:07:24.445Z\",\n             \"__v\": 0\n         },\n         {\n             \"_id\": \"333154f23437342a74ffe122\",\n             \"firstName\": \"Jannet\",\n             \"lastName\": \"Doe\",\n             \"pseudo\": \"jad\",\n             \"password\": \"$2b$10$5UITHwF.x1f4QpNTEwlIiuwhcxQrta0m96gasf1f3t4fMuCARn3JG\",\n             \"birthDate\": \"1995-03-17T02:24:00.000Z\",\n             \"picture\": \"https://wwww.example.com/jad.jpg\",\n           \"gender\": \"female\",\n             \"createdAt\": \"2019-11-07T10:19:08.304Z\",\n             \"__v\": 0\n         }\n     ]\n}",
+          "content": "   HTTP/1.1 200 OK\n   Content-Type: application/json\n   Link: &lt;https://e-sport-dev.herokuapp.com/api/teams;; rel=\"first prev\"\n\n  {\n     \"players\": [\n         \"111154f23437342a74ffe121\",\n         \"333154f23437342a74ffe122\",\n         \"333454f23437342a74ffe123\",\n         \"333154f23437342a74ffe124\",\n         \"333154f23437342a74ffe125\",\n         \"333154f23437342a74ffe126\"\n     ],\n     \"_id\": \"5dc1767576846e18643fe750\",\n     \"name\": \"Orlando\",\n     \"logo\": \"http://exemple.com/logo.jpg\",\n     \"__v\": 5,\n     \"createdAt\": \"2019-11-11T14:19:21.593Z\",\n     \"totaPlayers\": \"6\"\n}",
           "type": "json"
         }
       ],
@@ -1586,3 +1586,4 @@
     }
   }
 ]
+

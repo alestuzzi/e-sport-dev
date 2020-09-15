@@ -9,7 +9,7 @@
     "test": "cross-env MONGODB_URI=mongodb://127.0.0.1/esport-test NODE_ENV=test mocha spec/**/*.spec.js"
   },
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "cookie-parser": "~1.4.4",
     "debug": "~4.1.0",
     "express": "~4.17.1",
